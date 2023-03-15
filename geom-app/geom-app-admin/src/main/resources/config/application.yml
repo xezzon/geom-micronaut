@@ -17,3 +17,6 @@ spring:
 logging:
   level:
     root: info
+geom:
+  system:
+    id-generator: ${ID_GENERATOR:snowflake}

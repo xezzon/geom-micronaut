@@ -6,4 +6,5 @@ package io.github.xezzon.geom.constant;
 public class SpringConstants {
 
   public static final String GEOM_SYSTEM = "geom.system";
+  public static final String ID_GENERATOR = "id-generator";
 }

@@ -1,0 +1,19 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: geom-admin
+  profiles:
+    active:
+      - ${DB_TYPE:pgsql}
+      - ${ENV:prod}
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: NON_NULL
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+logging:
+  level:
+    root: info

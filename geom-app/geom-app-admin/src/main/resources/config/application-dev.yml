@@ -1,0 +1,7 @@
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+logging:
+  level:
+    io.github.xezzon.geom: debug

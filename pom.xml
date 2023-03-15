@@ -25,6 +25,7 @@
     <hutool.version>5.8.12</hutool.version>
     <querydsl.version>5.0.0</querydsl.version>
     <jetbrains-annotation.version>24.0.0</jetbrains-annotation.version>
+    <testcontainers.version>1.17.6</testcontainers.version>
   </properties>
 
   <dependencyManagement>
@@ -55,6 +56,14 @@
         <groupId>org.jetbrains</groupId>
         <artifactId>annotations</artifactId>
         <version>${jetbrains-annotation.version}</version>
+      </dependency>
+      <!-- 测试相关 -->
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

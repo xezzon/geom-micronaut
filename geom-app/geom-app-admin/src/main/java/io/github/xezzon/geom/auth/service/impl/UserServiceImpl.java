@@ -45,6 +45,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public User getById(String id) {
+    if (id == null) {
+      return null;
+    }
+    return userDAO.get().findById(id).orElse(null);
+  }
+
+  @Override
   public User getByUsername(String username) {
     if (username == null) {
       return null;

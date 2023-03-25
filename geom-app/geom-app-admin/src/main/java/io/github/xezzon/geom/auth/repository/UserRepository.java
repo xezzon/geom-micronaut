@@ -10,4 +10,10 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 public interface UserRepository
     extends JpaRepository<User, String>, QuerydslPredicateExecutor<User> {
 
+  /**
+   * 根据用户名查询
+   * @param username 用户名
+   * @return 查询结果
+   */
+  User findByUsername(String username);
 }

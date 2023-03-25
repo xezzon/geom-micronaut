@@ -1,9 +1,13 @@
 package io.github.xezzon.geom.auth.adaptor;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.domain.convert.UserConvert;
 import io.github.xezzon.geom.auth.domain.query.RegisterQuery;
+import io.github.xezzon.geom.auth.service.AuthService;
 import io.github.xezzon.geom.auth.service.UserService;
+import io.github.xezzon.tao.logger.LogRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,14 +22,30 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final transient UserService userService;
+  private final transient AuthService authService;
 
   @Autowired
-  public AuthController(UserService userService) {
+  public AuthController(
+      UserService userService,
+      AuthService authService
+  ) {
     this.userService = userService;
+    this.authService = authService;
   }
 
   @PostMapping("/register")
   public User register(@RequestBody RegisterQuery user) {
     return userService.register(UserConvert.INSTANCE.from(user));
+  }
+
+  /**
+   * 用户登录
+   * @param user 用户名 密码
+   */
+  @PostMapping("/login")
+  @LogRecord
+  public SaTokenInfo login(@RequestBody User user) {
+    authService.login(user.getUsername(), user.getPlaintext());
+    return StpUtil.getTokenInfo();
   }
 }

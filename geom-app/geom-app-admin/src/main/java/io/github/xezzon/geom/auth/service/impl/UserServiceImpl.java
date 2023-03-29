@@ -18,7 +18,9 @@ public class UserServiceImpl implements UserService {
   private final transient UserDAO userDAO;
 
   @Autowired
-  public UserServiceImpl(UserDAO userDAO) {
+  public UserServiceImpl(
+      UserDAO userDAO
+  ) {
     this.userDAO = userDAO;
   }
 
@@ -40,5 +42,21 @@ public class UserServiceImpl implements UserService {
     return new User()
         .setId(user.getId())
         .setNickname(user.getNickname());
+  }
+
+  @Override
+  public User getById(String id) {
+    if (id == null) {
+      return null;
+    }
+    return userDAO.get().findById(id).orElse(null);
+  }
+
+  @Override
+  public User getByUsername(String username) {
+    if (username == null) {
+      return null;
+    }
+    return userDAO.get().findByUsername(username);
   }
 }

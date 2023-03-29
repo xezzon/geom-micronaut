@@ -20,12 +20,14 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!--依赖版本-->
-    <tao.version>0.9.0</tao.version>
+    <tao.version>0.9.1</tao.version>
     <spring-boot.version>3.0.2</spring-boot.version>
     <hutool.version>5.8.12</hutool.version>
     <querydsl.version>5.0.0</querydsl.version>
     <jetbrains-annotation.version>24.0.0</jetbrains-annotation.version>
     <testcontainers.version>1.17.6</testcontainers.version>
+    <mapstruct.version>1.5.3.Final</mapstruct.version>
+    <sa-token.version>1.34.0</sa-token.version>
   </properties>
 
   <dependencyManagement>
@@ -56,6 +58,17 @@
         <groupId>org.jetbrains</groupId>
         <artifactId>annotations</artifactId>
         <version>${jetbrains-annotation.version}</version>
+      </dependency>
+      <!-- 安全依赖 -->
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-spring-boot3-starter</artifactId>
+        <version>${sa-token.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-dao-redis-jackson</artifactId>
+        <version>${sa-token.version}</version>
       </dependency>
       <!-- 测试相关 -->
       <dependency>

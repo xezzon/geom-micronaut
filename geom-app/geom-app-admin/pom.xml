@@ -23,5 +23,10 @@
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-crypto</artifactId>
     </dependency>
+    <!-- 认证模块依赖 -->
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-spring-boot3-starter</artifactId>
+    </dependency>
   </dependencies>
 </project>

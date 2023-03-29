@@ -60,4 +60,12 @@ public class AuthController {
   public User getCurrentUser() {
     return userService.getById(StpUtil.getLoginId(null));
   }
+
+  /**
+   * 退出登录
+   */
+  @PostMapping("/logout")
+  public void logout() {
+    StpUtil.logout();
+  }
 }

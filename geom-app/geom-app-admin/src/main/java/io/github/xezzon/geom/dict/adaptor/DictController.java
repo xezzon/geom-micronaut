@@ -1,6 +1,7 @@
 package io.github.xezzon.geom.dict.adaptor;
 
 import io.github.xezzon.geom.dict.domain.Dict;
+import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import java.util.Collections;
 import java.util.List;
@@ -18,12 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/dict")
 public class DictController {
 
+  private final transient DictService dictService;
+
+  public DictController(DictService dictService) {
+    this.dictService = dictService;
+  }
+
   /**
    * 分页查询字典目
    */
   @GetMapping("/tag")
   public Page<Dict> dictTagPage(CommonQuery params) {
-    return Page.empty();
+    return dictService.dictTagPage(params);
   }
 
   /**

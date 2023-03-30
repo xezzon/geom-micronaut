@@ -15,4 +15,10 @@ public interface DictService {
    * @return 字典目列表
    */
   Page<Dict> dictTagPage(CommonQuery params);
+
+  /**
+   * 新增字典
+   * @param dict 字典信息
+   */
+  void addDict(Dict dict);
 }

@@ -11,4 +11,5 @@ public interface DictRepository
     extends JpaRepository<Dict, String>,
     QuerydslPredicateExecutor<Dict> {
 
+  Dict findByTagAndCode(String tag, String code);
 }

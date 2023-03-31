@@ -20,7 +20,7 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!--依赖版本-->
-    <tao.version>0.9.1</tao.version>
+    <tao.version>0.9.2</tao.version>
     <spring-boot.version>3.0.2</spring-boot.version>
     <hutool.version>5.8.12</hutool.version>
     <querydsl.version>5.0.0</querydsl.version>
@@ -37,14 +37,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
         <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <!-- 二方包 -->
-      <dependency>
-        <groupId>io.github.xezzon</groupId>
-        <artifactId>tao-bom</artifactId>
-        <version>${tao.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -75,6 +67,14 @@
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers-bom</artifactId>
         <version>${testcontainers.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!-- 二方包 -->
+      <dependency>
+        <groupId>io.github.xezzon</groupId>
+        <artifactId>tao-bom</artifactId>
+        <version>${tao.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

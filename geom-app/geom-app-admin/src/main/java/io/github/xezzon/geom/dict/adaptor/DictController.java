@@ -2,10 +2,12 @@ package io.github.xezzon.geom.dict.adaptor;
 
 import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.dict.service.DictService;
+import io.github.xezzon.tao.logger.LogRecord;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,7 @@ public class DictController {
    * 分页查询字典目
    */
   @GetMapping("/tag")
+  @LogRecord
   public Page<Dict> dictTagPage(CommonQuery params) {
     return dictService.dictTagPage(params);
   }
@@ -39,7 +42,8 @@ public class DictController {
    * @param dict 字典信息
    */
   @PostMapping("")
-  public void addDict(@RequestBody Dict dict) {
+  @LogRecord
+  public void addDict(@RequestBody @Validated Dict dict) {
     dictService.addDict(dict);
   }
 
@@ -47,6 +51,7 @@ public class DictController {
    * 查询字典目下的字典集合
    */
   @GetMapping("/{tag}")
+  @LogRecord
   public List<Dict> dictListByTag(@PathVariable String tag) {
     return Collections.emptyList();
   }
@@ -58,6 +63,7 @@ public class DictController {
    * @return 字典信息
    */
   @GetMapping("/{tag}/{code}")
+  @LogRecord
   public Dict dictByTagAndCode(@PathVariable String tag, @PathVariable String code) {
     return null;
   }

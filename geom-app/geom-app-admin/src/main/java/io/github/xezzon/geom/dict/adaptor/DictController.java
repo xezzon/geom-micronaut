@@ -6,6 +6,7 @@ import io.github.xezzon.tao.retrieval.CommonQuery;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class DictController {
    * @param dict 字典信息
    */
   @PostMapping("")
-  public void addDict(@RequestBody Dict dict) {
+  public void addDict(@RequestBody @Validated Dict dict) {
     dictService.addDict(dict);
   }
 

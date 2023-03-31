@@ -1,10 +1,11 @@
 package io.github.xezzon.geom.dict.service.impl;
 
-import io.github.xezzon.geom.dict.repository.wrapper.DictDAO;
 import io.github.xezzon.geom.dict.domain.Dict;
+import io.github.xezzon.geom.dict.repository.wrapper.DictDAO;
 import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,10 @@ public class DictServiceImpl implements DictService {
       throw new ClientException("字典码已存在");
     }
     dictDAO.get().save(dict);
+  }
+
+  @Override
+  public List<Dict> dictListByTag(String tag) {
+    return dictDAO.get().findByTag(tag);
   }
 }

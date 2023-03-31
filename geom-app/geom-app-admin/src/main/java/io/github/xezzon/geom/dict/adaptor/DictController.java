@@ -4,7 +4,6 @@ import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.github.xezzon.tao.retrieval.CommonQuery;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -53,7 +52,7 @@ public class DictController {
   @GetMapping("/{tag}")
   @LogRecord
   public List<Dict> dictListByTag(@PathVariable String tag) {
-    return Collections.emptyList();
+    return dictService.dictListByTag(tag);
   }
 
   /**

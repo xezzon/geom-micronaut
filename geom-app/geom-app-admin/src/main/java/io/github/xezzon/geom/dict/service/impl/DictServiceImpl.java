@@ -5,7 +5,11 @@ import io.github.xezzon.geom.dict.repository.wrapper.DictDAO;
 import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
+import io.github.xezzon.tao.tree.Tree;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +42,16 @@ public class DictServiceImpl implements DictService {
   @Override
   public List<Dict> dictListByTag(String tag) {
     return dictDAO.get().findByTag(tag);
+  }
+
+  @Override
+  public void removeDict(String id) {
+    List<Dict> dictList = Tree.topDown(Collections.singleton(id), -1,
+        dictDAO.get()::findByParentIdIn);
+    Set<String> dictIdSet = dictList.parallelStream()
+        .map(Dict::getId)
+        .collect(Collectors.toSet());
+    dictIdSet.add(id);
+    dictDAO.get().deleteAllByIdInBatch(dictIdSet);
   }
 }

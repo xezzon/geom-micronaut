@@ -29,4 +29,10 @@ public interface DictService {
    * @return 字典信息集合
    */
   List<Dict> dictListByTag(String tag);
+
+  /**
+   * 递归删除字典及其子级
+   * @param id 字典ID
+   */
+  void removeDict(String id);
 }

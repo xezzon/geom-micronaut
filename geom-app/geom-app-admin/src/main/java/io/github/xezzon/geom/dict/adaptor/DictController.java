@@ -7,6 +7,7 @@ import io.github.xezzon.tao.retrieval.CommonQuery;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +66,10 @@ public class DictController {
   @LogRecord
   public Dict dictByTagAndCode(@PathVariable String tag, @PathVariable String code) {
     return null;
+  }
+
+  @DeleteMapping("/{id}")
+  public void remove(@PathVariable String id) {
+    dictService.removeDict(id);
   }
 }

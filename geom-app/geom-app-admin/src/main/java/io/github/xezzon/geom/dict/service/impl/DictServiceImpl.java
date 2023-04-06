@@ -55,4 +55,9 @@ public class DictServiceImpl implements DictService {
     dictIdSet.add(id);
     dictDAO.get().deleteAllByIdInBatch(dictIdSet);
   }
+
+  @Override
+  public void modifyDict(Dict dict) {
+    dictDAO.get().save(dict);
+  }
 }

@@ -36,4 +36,10 @@ public interface DictService {
    * @param id 字典ID
    */
   void removeDict(String id);
+
+  /**
+   * 修改字典
+   * @param dict 新的字典信息
+   */
+  void modifyDict(Dict dict);
 }

@@ -42,4 +42,12 @@ public interface DictService {
    * @param dict 新的字典信息
    */
   void modifyDict(Dict dict);
+
+  /**
+   * 定位字典
+   * @param tag 字典目
+   * @param code 字典码
+   * @return 字典信息
+   */
+  Dict dictByTagAndCode(String tag, String code);
 }

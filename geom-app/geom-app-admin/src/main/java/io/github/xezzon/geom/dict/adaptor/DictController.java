@@ -67,7 +67,7 @@ public class DictController {
   @GetMapping("/{tag}/{code}")
   @LogRecord
   public Dict dictByTagAndCode(@PathVariable String tag, @PathVariable String code) {
-    return null;
+    return dictService.dictByTagAndCode(tag, code);
   }
 
   @DeleteMapping("/{id}")

@@ -60,4 +60,9 @@ public class DictServiceImpl implements DictService {
   public void modifyDict(Dict dict) {
     dictDAO.get().save(dict);
   }
+
+  @Override
+  public Dict dictByTagAndCode(String tag, String code) {
+    return dictDAO.get().findByTagAndCode(tag, code);
+  }
 }

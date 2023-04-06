@@ -41,7 +41,8 @@ public class DictServiceImpl implements DictService {
 
   @Override
   public List<Dict> dictListByTag(String tag) {
-    return dictDAO.get().findByTag(tag);
+    List<Dict> dictList = dictDAO.get().findByTag(tag);
+    return Tree.fold(dictList);
   }
 
   @Override

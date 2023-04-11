@@ -2,7 +2,7 @@ server:
   port: 9001
 spring:
   application:
-    name: geom-admin
+    name: geom-admin-api
   profiles:
     active:
       - ${DB_TYPE:pgsql}

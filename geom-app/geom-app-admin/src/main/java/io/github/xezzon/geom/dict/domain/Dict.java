@@ -64,7 +64,7 @@ public class Dict implements IDict, TreeNode<Dict, String> {
    */
   @NotNull(message = "字典编码不能为空")
   @Pattern(regexp = "[\\w-]+", message = "字典编码只允许英文字母、下划线、短横线")
-  @Column(name = CODE, nullable = false)
+  @Column(name = CODE, nullable = false, updatable = false)
   private String code;
   /**
    * 字典描述
@@ -79,12 +79,13 @@ public class Dict implements IDict, TreeNode<Dict, String> {
   /**
    * 上级字典ID
    */
-  @Column(name = "parent_id", nullable = false)
+  @Column(name = "parent_id", nullable = false, updatable = false)
   private String parentId;
 
   @Transient
   private List<Dict> children;
 
+  @Override
   public int getOrdinal() {
     return Optional.ofNullable(ordinal).orElse(0);
   }

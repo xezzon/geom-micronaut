@@ -4,13 +4,15 @@ import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.github.xezzon.tao.retrieval.CommonQuery;
-import java.util.Collections;
+import io.github.xezzon.tao.tree.TreeNode;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,8 +54,8 @@ public class DictController {
    */
   @GetMapping("/{tag}")
   @LogRecord
-  public List<Dict> dictListByTag(@PathVariable String tag) {
-    return Collections.emptyList();
+  public List<? extends TreeNode<Dict, ?>> dictListByTag(@PathVariable String tag) {
+    return dictService.dictListByTag(tag);
   }
 
   /**
@@ -65,6 +67,16 @@ public class DictController {
   @GetMapping("/{tag}/{code}")
   @LogRecord
   public Dict dictByTagAndCode(@PathVariable String tag, @PathVariable String code) {
-    return null;
+    return dictService.dictByTagAndCode(tag, code);
+  }
+
+  @DeleteMapping("/{id}")
+  public void remove(@PathVariable String id) {
+    dictService.removeDict(id);
+  }
+
+  @PutMapping("")
+  public void modifyDict(@RequestBody @Validated Dict dict) {
+    dictService.modifyDict(dict);
   }
 }

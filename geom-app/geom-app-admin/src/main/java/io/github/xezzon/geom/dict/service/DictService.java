@@ -2,7 +2,6 @@ package io.github.xezzon.geom.dict.service;
 
 import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.tao.retrieval.CommonQuery;
-import io.github.xezzon.tao.tree.TreeNode;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -29,7 +28,7 @@ public interface DictService {
    * @param tag 字典目
    * @return 字典信息集合（树形结构）
    */
-  List<? extends TreeNode<Dict, ?>> dictListByTag(String tag);
+  List<Dict> dictListByTag(String tag);
 
   /**
    * 递归删除字典及其子级

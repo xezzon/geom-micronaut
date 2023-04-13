@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_URL:pgsql:5432/geom}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:11-alpine:///databasename
+  jpa:
+    generate-ddl: true
+    show-sql: true
+logging:
+  level:
+    org.hibernate.type: TRACE

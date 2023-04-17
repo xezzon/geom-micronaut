@@ -46,7 +46,6 @@
     <dependency>
       <groupId>io.github.xezzon</groupId>
       <artifactId>tao-addon-jpa</artifactId>
-      <version>0.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>

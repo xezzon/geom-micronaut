@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -43,7 +44,7 @@ public class DictController {
    * 新增字典/字典目
    * @param dict 字典信息
    */
-  @PostMapping("")
+  @PostMapping()
   @LogRecord
   public void addDict(@RequestBody @Validated Dict dict) {
     dictService.addDict(dict);
@@ -52,9 +53,9 @@ public class DictController {
   /**
    * 查询字典目下的字典集合
    */
-  @GetMapping("/{tag}")
+  @GetMapping(params = {"tag"})
   @LogRecord
-  public List<? extends TreeNode<Dict, ?>> dictListByTag(@PathVariable String tag) {
+  public List<? extends TreeNode<Dict, ?>> dictListByTag(@RequestParam String tag) {
     return dictService.dictListByTag(tag);
   }
 
@@ -64,9 +65,9 @@ public class DictController {
    * @param code 字典码
    * @return 字典信息
    */
-  @GetMapping("/{tag}/{code}")
+  @GetMapping(params = {"tag", "code"})
   @LogRecord
-  public Dict dictByTagAndCode(@PathVariable String tag, @PathVariable String code) {
+  public Dict dictByTagAndCode(@RequestParam String tag, @RequestParam String code) {
     return dictService.dictByTagAndCode(tag, code);
   }
 
@@ -75,7 +76,7 @@ public class DictController {
     dictService.removeDict(id);
   }
 
-  @PutMapping("")
+  @PutMapping()
   public void modifyDict(@RequestBody @Validated Dict dict) {
     dictService.modifyDict(dict);
   }

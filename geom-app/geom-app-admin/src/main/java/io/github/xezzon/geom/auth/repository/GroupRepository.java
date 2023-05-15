@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface GroupRepository
     extends JpaRepository<Group, String>, QuerydslPredicateExecutor<Group> {
 
+  boolean existsByCodeAndOwnerId(String code, String ownerId);
 }

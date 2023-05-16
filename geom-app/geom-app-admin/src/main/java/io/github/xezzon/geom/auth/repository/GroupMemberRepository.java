@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface GroupMemberRepository
     extends JpaRepository<GroupMember, String>, QuerydslPredicateExecutor<GroupMember> {
 
+  boolean existsByGroupIdAndUserId(String groupId, String userId);
 }

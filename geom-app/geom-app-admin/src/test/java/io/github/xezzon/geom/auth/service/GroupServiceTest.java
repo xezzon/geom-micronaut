@@ -6,7 +6,9 @@ import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.repository.GroupRepository;
 import io.github.xezzon.tao.exception.ClientException;
 import jakarta.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,5 +46,17 @@ class GroupServiceTest {
       group1.setOwnerId(ownerId);
       service.addGroup(group1);
     });
+  }
+
+  @Test
+  void joinGroup() {
+    Group group = new Group();
+    group.setCode(RandomUtil.randomString(6));
+    group.setOwnerId(IdUtil.getSnowflakeNextIdStr());
+    service.addGroup(group);
+    List<String> usersId = IntStream.range(1, 100)
+        .mapToObj(i -> IdUtil.getSnowflakeNextIdStr())
+        .toList();
+    service.joinGroup(group.getId(), usersId);
   }
 }

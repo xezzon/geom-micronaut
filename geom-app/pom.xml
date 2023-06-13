@@ -20,6 +20,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <app.port>8080</app.port>
   </properties>
 
   <dependencies>
@@ -91,33 +92,52 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
         <configuration>
-          <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
-          <image>
-            <name>geom/${project.artifactId}:${project.version}</name>
-            <pullPolicy>IF_NOT_PRESENT</pullPolicy>
-            <buildpacks>
-              <buildpack>paketobuildpacks/microsoft-openjdk</buildpack>
-              <buildpack>urn:cnb:builder:paketo-buildpacks/java</buildpack>
-            </buildpacks>
-            <buildCache>
-              <volume>
-                <name>cache-${project.artifactId}.build</name>
-              </volume>
-            </buildCache>
-            <launchCache>
-              <volume>
-                <name>cache-${project.artifactId}.launch</name>
-              </volume>
-            </launchCache>
-          </image>
+          <images>
+            <image>
+              <name>%g/%a:%l</name>
+              <build>
+                <from>eclipse-temurin:17-jdk</from>
+                <tags>
+                  <tag>${project.version}</tag>
+                </tags>
+                <assembly>
+                  <descriptorRef>artifact</descriptorRef>
+                </assembly>
+                <cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+                <buildx>
+                  <platforms>
+                    <platform>linux/amd64</platform>
+                    <platform>linux/arm64</platform>
+                    <platform>linux/riscv64</platform>
+                  </platforms>
+                </buildx>
+                <ports>
+                  <port>${app.port}</port>
+                </ports>
+              </build>
+            </image>
+          </images>
         </configuration>
         <executions>
           <execution>
-            <phase>deploy</phase>
+            <id>docker-build</id>
             <goals>
-              <goal>build-image</goal>
+              <goal>build</goal>
             </goals>
+            <phase>install</phase>
           </execution>
         </executions>
       </plugin>

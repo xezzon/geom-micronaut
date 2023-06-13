@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: @app.port@
 spring:
   application:
     name: geom-admin-api

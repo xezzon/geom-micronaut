@@ -20,4 +20,11 @@ public interface GroupService {
    * @param usersId 用户主键
    */
   void joinGroup(String groupId, Collection<String> usersId);
+
+  /**
+   * 生成用户组的密钥对
+   * @param groupId 用户组ID
+   * @return 私钥（BASE64编码）
+   */
+  String generateSecretKey(String groupId);
 }

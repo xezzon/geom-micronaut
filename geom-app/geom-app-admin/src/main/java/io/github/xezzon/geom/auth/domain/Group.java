@@ -55,6 +55,11 @@ public class Group extends BaseEntity<String> {
    */
   @Column(length = DatabaseConstant.ID_LENGTH, nullable = false)
   private String ownerId;
+  /**
+   * 用户组公钥
+   */
+  @Column
+  private String publicKey;
 
   @Override
   public Group setId(String id) {

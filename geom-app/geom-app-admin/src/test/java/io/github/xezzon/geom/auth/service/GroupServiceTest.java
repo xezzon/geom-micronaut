@@ -13,18 +13,37 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+@TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
 @ActiveProfiles("test")
 class GroupServiceTest {
+
+  private static final Group GROUP;
+
+  static {
+    GROUP = new Group();
+    GROUP.setId(IdUtil.getSnowflakeNextIdStr());
+    GROUP.setCode(RandomUtil.randomString(6));
+    GROUP.setName(RandomUtil.randomString(6));
+    GROUP.setOwnerId(IdUtil.getSnowflakeNextIdStr());
+  }
 
   @Resource
   private transient GroupService service;
   @Resource
   private transient GroupRepository repository;
+
+  @BeforeAll
+  void beforeAll() {
+    repository.save(GROUP);
+  }
 
   @Test
   void addGroup() {

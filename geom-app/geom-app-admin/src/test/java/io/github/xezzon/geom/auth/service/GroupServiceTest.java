@@ -1,17 +1,18 @@
 package io.github.xezzon.geom.auth.service;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.repository.GroupRepository;
 import io.github.xezzon.tao.exception.ClientException;
 import jakarta.annotation.Resource;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.shaded.org.bouncycastle.util.encoders.Hex;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -83,7 +85,7 @@ class GroupServiceTest {
   }
 
   @Test
-  void generateSecretKey() {
+  void generateSecretKey() throws GeneralSecurityException {
     Group group = new Group();
     String flakeId = IdUtil.getSnowflakeNextIdStr();
     String code = RandomUtil.randomString(6);
@@ -95,14 +97,16 @@ class GroupServiceTest {
     group.setOwnerId(ownerId);
     service.addGroup(group);
 
-    String privateKey = service.generateSecretKey(group.getId());
-    Optional<Group> optionalGroup = repository.findById(group.getId());
-    String publicKey = optionalGroup.get().getPublicKey();
-
-    final RSA rsa = new RSA(Base64.decode(privateKey), Base64.decode(publicKey));
     String message = RandomUtil.randomString(64);
-    byte[] encrypt = rsa.encrypt(message, KeyType.PrivateKey);
-    byte[] decrypt = rsa.decrypt(encrypt, KeyType.PublicKey);
-    Assertions.assertEquals(message, new String(decrypt));
+    // 加密与解密
+    String secretKeyString = service.generateSecretKey(group.getId());
+    SecretKeySpec secretKeySpec = new SecretKeySpec(Hex.decode(secretKeyString), "SM4");
+    Cipher encrypt = Cipher.getInstance("SM4/ECB/NoPadding", new BouncyCastleProvider());
+    encrypt.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+    byte[] encrypted = encrypt.doFinal(message.getBytes());
+    Cipher decrypt = Cipher.getInstance("SM4/ECB/NoPadding", new BouncyCastleProvider());
+    decrypt.init(Cipher.DECRYPT_MODE, secretKeySpec);
+    String decrypted = new String(decrypt.doFinal(encrypted));
+    Assertions.assertEquals(message, decrypted);
   }
 }

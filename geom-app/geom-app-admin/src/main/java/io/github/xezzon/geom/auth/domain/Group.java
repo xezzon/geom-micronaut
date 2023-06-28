@@ -3,7 +3,10 @@ package io.github.xezzon.geom.auth.domain;
 import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_NAME;
 import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_STRATEGY;
 
+import cn.hutool.core.codec.Hashids;
+import cn.hutool.core.util.HexUtil;
 import io.github.xezzon.geom.constant.DatabaseConstant;
+import io.github.xezzon.geom.constant.StaticConstants;
 import io.github.xezzon.geom.manager.HibernateIdGenerator;
 import io.github.xezzon.tao.jpa.BaseEntity;
 import jakarta.persistence.Column;
@@ -56,14 +59,26 @@ public class Group extends BaseEntity<String> {
   @Column(length = DatabaseConstant.ID_LENGTH, nullable = false)
   private String ownerId;
   /**
-   * 用户组公钥
+   * 用户组密钥
    */
   @Column
-  private String publicKey;
+  private String secretKey;
 
   @Override
   public Group setId(String id) {
     this.id = id;
     return this;
+  }
+
+  public String getAccessKey() {
+    return Hashids.create(StaticConstants.getHashidsSalt().toCharArray())
+        .encodeFromHex(HexUtil.encodeHexStr(this.id));
+  }
+
+  public void setAccessKey(String accessKey) {
+    this.id = HexUtil.decodeHexStr(
+        Hashids.create(StaticConstants.getHashidsSalt().toCharArray())
+            .decodeToHex(accessKey)
+    );
   }
 }

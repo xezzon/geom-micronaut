@@ -68,7 +68,7 @@ public class GroupServiceImpl implements GroupService {
       String secretKey = Hex.toHexString(keyGenerator.generateKey().getEncoded());
       Group group = new Group();
       group.setId(groupId);
-      group.setPublicKey(secretKey);
+      group.setSecretKey(secretKey);
       boolean updated = groupDAO.update(group);
       if (!updated) {
         throw new ServerException("用户组不存在");

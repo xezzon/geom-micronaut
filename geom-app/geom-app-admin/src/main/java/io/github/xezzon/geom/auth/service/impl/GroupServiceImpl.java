@@ -1,5 +1,8 @@
 package io.github.xezzon.geom.auth.service.impl;
 
+import cn.hutool.crypto.PemUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMember;
 import io.github.xezzon.geom.auth.repository.wrapper.GroupDAO;
@@ -7,13 +10,14 @@ import io.github.xezzon.geom.auth.repository.wrapper.GroupMemberDAO;
 import io.github.xezzon.geom.auth.service.GroupService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.exception.ServerException;
+import java.io.StringReader;
 import java.security.GeneralSecurityException;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Service;
 
 /**
@@ -65,7 +69,9 @@ public class GroupServiceImpl implements GroupService {
     try {
       KeyGenerator keyGenerator = KeyGenerator.getInstance("SM4", new BouncyCastleProvider());
       keyGenerator.init(128);
-      String secretKey = Hex.toHexString(keyGenerator.generateKey().getEncoded());
+      String secretKey = Base64.getEncoder().encodeToString(
+          keyGenerator.generateKey().getEncoded()
+      );
       Group group = new Group();
       group.setId(groupId);
       group.setSecretKey(secretKey);
@@ -77,5 +83,17 @@ public class GroupServiceImpl implements GroupService {
     } catch (GeneralSecurityException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public byte[] refreshSecretKey(String groupId, String publicKey) {
+    /* TODO: 校验用户是否可以刷新密钥 */
+    /* 生成密钥并保存 */
+    String secretKey = this.generateSecretKey(groupId);
+    /* 将密钥进行非对称加密 */
+    RSA rsa = new RSA(
+        null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
+    );
+    return rsa.encrypt(secretKey, KeyType.PublicKey);
   }
 }

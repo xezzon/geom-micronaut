@@ -2,11 +2,15 @@ package io.github.xezzon.geom.auth.service;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.PemUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.repository.GroupRepository;
 import io.github.xezzon.tao.exception.ClientException;
 import jakarta.annotation.Resource;
 import java.security.GeneralSecurityException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -20,7 +24,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.shaded.org.bouncycastle.util.encoders.Hex;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -100,7 +103,9 @@ class GroupServiceTest {
     String message = RandomUtil.randomString(64);
     // 加密与解密
     String secretKeyString = service.generateSecretKey(group.getId());
-    SecretKeySpec secretKeySpec = new SecretKeySpec(Hex.decode(secretKeyString), "SM4");
+    SecretKeySpec secretKeySpec = new SecretKeySpec(
+        Base64.getDecoder().decode(secretKeyString), "SM4"
+    );
     Cipher encrypt = Cipher.getInstance("SM4/ECB/NoPadding", new BouncyCastleProvider());
     encrypt.init(Cipher.ENCRYPT_MODE, secretKeySpec);
     byte[] encrypted = encrypt.doFinal(message.getBytes());
@@ -108,5 +113,16 @@ class GroupServiceTest {
     decrypt.init(Cipher.DECRYPT_MODE, secretKeySpec);
     String decrypted = new String(decrypt.doFinal(encrypted));
     Assertions.assertEquals(message, decrypted);
+  }
+
+  @Test
+  void refreshSecretKey() {
+    RSA rsa = new RSA();
+    byte[] decryptedSecretKey = service.refreshSecretKey(
+        GROUP.getId(), PemUtil.toPem(KeyType.PublicKey.name(), rsa.getPublicKey().getEncoded())
+    );
+    String secretKey = new String(rsa.decrypt(decryptedSecretKey, KeyType.PrivateKey));
+    Group group = repository.findById(GROUP.getId()).get();
+    Assertions.assertEquals(group.getSecretKey(), secretKey);
   }
 }

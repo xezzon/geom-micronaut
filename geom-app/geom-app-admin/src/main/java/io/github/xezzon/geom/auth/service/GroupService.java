@@ -27,4 +27,12 @@ public interface GroupService {
    * @return 私钥（BASE64编码）
    */
   String generateSecretKey(String groupId);
+
+  /**
+   * 客户端获取密钥
+   * @param groupId 用户组
+   * @param publicKey 客户端提供的加密公钥（PEM格式）
+   * @return 被加密的密钥（Hex编码）
+   */
+  byte[] refreshSecretKey(String groupId, String publicKey);
 }

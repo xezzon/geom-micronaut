@@ -2,9 +2,12 @@ package io.github.xezzon.geom.auth.adaptor;
 
 import cn.hutool.core.util.HexUtil;
 import io.github.xezzon.geom.auth.domain.Group;
+import io.github.xezzon.geom.auth.domain.query.AddGroupQuery;
 import io.github.xezzon.geom.auth.service.GroupService;
 import io.github.xezzon.tao.exception.ServerException;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,24 +28,23 @@ public class GroupController {
     this.groupService = groupService;
   }
 
-
   /**
    * 新增用户组
-   * @param group 用户组信息
+   * @param query 新增用户组请求体
    */
   @PostMapping()
-  public void addGroup(@RequestBody Group group) {
-    groupService.addGroup(group);
+  public void addGroup(@RequestBody AddGroupQuery query) {
+    groupService.addGroup(query.to());
   }
 
   /**
    * 将用户加入用户组
    * @param groupId 用户组主键
-   * @param usersId 用户主键
+   * @param userId 用户主键
    */
-  @PostMapping("/{groupId}")
-  public void joinGroup(@PathVariable String groupId, @RequestBody Collection<String> usersId) {
-    groupService.joinGroup(groupId, usersId);
+  @PostMapping("/{groupId}/member/{userId}")
+  public void joinGroup(@PathVariable String groupId, @PathVariable String userId) {
+    groupService.joinGroup(groupId, Collections.singleton(userId));
   }
 
   @PatchMapping("/{id}/secret-key")

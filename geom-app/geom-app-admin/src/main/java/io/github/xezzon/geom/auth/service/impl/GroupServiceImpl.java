@@ -1,5 +1,6 @@
 package io.github.xezzon.geom.auth.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -40,7 +41,7 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public void addGroup(Group group) {
     /* 前置处理 */
-    group.setId(null);
+    group.setOwnerId(StpUtil.getLoginId(null));
     // 检查重复项
     if (groupDAO.get().existsByCodeAndOwnerId(group.getCode(), group.getOwnerId())) {
       throw new ClientException("用户组" + group.getCode() + "已存在");

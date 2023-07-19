@@ -4,7 +4,6 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import io.github.xezzon.geom.auth.domain.User;
-import io.github.xezzon.geom.auth.domain.convert.UserConvert;
 import io.github.xezzon.geom.auth.domain.query.RegisterQuery;
 import io.github.xezzon.geom.auth.service.AuthService;
 import io.github.xezzon.geom.auth.service.UserService;
@@ -37,7 +36,7 @@ public class AuthController {
 
   @PostMapping("/register")
   public User register(@RequestBody RegisterQuery user) {
-    return userService.register(UserConvert.INSTANCE.from(user));
+    return userService.register(user.to());
   }
 
   /**

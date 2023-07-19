@@ -2,10 +2,16 @@ package io.github.xezzon.geom.auth.domain.query;
 
 import static io.github.xezzon.geom.constant.PatternConstants.PASSWORD_PATTERN;
 
+import io.github.xezzon.geom.auth.domain.User;
+import io.github.xezzon.geom.trait.IConverter;
+import io.github.xezzon.geom.trait.IQuery;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -15,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 @Setter
 @ToString
 @Validated
-public class RegisterQuery {
+public class RegisterQuery implements IQuery<User> {
 
   /**
    * 用户名
@@ -37,4 +43,22 @@ public class RegisterQuery {
    * 用户昵称
    */
   private String nickname;
+
+  public User to() {
+    return RegisterQueryConverter.INSTANCE.convert(this);
+  }
+}
+
+@Mapper
+interface RegisterQueryConverter extends IConverter<RegisterQuery, User> {
+
+  RegisterQueryConverter INSTANCE = Mappers.getMapper(RegisterQueryConverter.class);
+
+  @Override
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "cipher", ignore = true)
+  @Mapping(target = "plaintext", source = "cipher")
+  @Mapping(target = "createTime", ignore = true)
+  @Mapping(target = "updateTime", ignore = true)
+  User convert(RegisterQuery source);
 }

@@ -2,11 +2,19 @@ package io.github.xezzon.geom.auth.service;
 
 import io.github.xezzon.geom.auth.domain.Group;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author xezzon
  */
 public interface GroupService {
+
+  /**
+   * 根据用户ID查询其用户组
+   * @param userId 用户ID
+   * @return 用户组集合
+   */
+  List<Group> listGroupByUserId(String userId);
 
   /**
    * 新增用户组

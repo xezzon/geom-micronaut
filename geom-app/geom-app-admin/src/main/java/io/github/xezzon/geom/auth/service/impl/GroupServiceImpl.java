@@ -39,6 +39,11 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
+  public List<Group> listGroupByUserId(String userId) {
+    return groupDAO.get().findByOwnerId(userId);
+  }
+
+  @Override
   public void addGroup(Group group) {
     /* 前置处理 */
     group.setOwnerId(StpUtil.getLoginId(null));

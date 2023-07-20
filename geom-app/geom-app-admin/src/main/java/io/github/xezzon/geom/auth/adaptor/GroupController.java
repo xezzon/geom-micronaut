@@ -1,5 +1,6 @@
 package io.github.xezzon.geom.auth.adaptor;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.HexUtil;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.query.AddGroupQuery;
@@ -26,6 +27,15 @@ public class GroupController {
 
   public GroupController(GroupService groupService) {
     this.groupService = groupService;
+  }
+
+  /**
+   * 获取当前用户所在用户组集合
+   * @return 用户组集合
+   */
+  @GetMapping()
+  public List<Group> getMyGroup() {
+    return groupService.listGroupByUserId(StpUtil.getLoginId(null));
   }
 
   /**

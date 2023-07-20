@@ -5,6 +5,7 @@ import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_STRAT
 
 import cn.hutool.core.codec.Hashids;
 import cn.hutool.core.util.HexUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.xezzon.geom.constant.DatabaseConstant;
 import io.github.xezzon.geom.constant.StaticConstants;
 import io.github.xezzon.geom.manager.HibernateIdGenerator;
@@ -62,6 +63,7 @@ public class Group extends BaseEntity<String> {
    * 用户组密钥
    */
   @Column
+  @JsonIgnore
   private String secretKey;
 
   @Override

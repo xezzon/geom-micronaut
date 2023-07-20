@@ -6,9 +6,12 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMember;
+import io.github.xezzon.geom.auth.domain.GroupMemberUser;
+import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.repository.wrapper.GroupDAO;
 import io.github.xezzon.geom.auth.repository.wrapper.GroupMemberDAO;
 import io.github.xezzon.geom.auth.service.GroupService;
+import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.exception.ServerException;
 import java.io.StringReader;
@@ -19,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,13 +35,16 @@ public class GroupServiceImpl implements GroupService {
 
   private final transient GroupDAO groupDAO;
   private final transient GroupMemberDAO groupMemberDAO;
+  private final transient UserService userService;
 
   public GroupServiceImpl(
       GroupDAO groupDAO,
-      GroupMemberDAO groupMemberDAO
+      GroupMemberDAO groupMemberDAO,
+      UserService userService
   ) {
     this.groupDAO = groupDAO;
     this.groupMemberDAO = groupMemberDAO;
+    this.userService = userService;
   }
 
   @Override
@@ -101,5 +110,20 @@ public class GroupServiceImpl implements GroupService {
         null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
     );
     return rsa.encrypt(secretKey, KeyType.PublicKey);
+  }
+
+  @Override
+  public Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, int pageSize) {
+    Page<GroupMember> page = groupMemberDAO.get()
+        .findByGroupId(groupId, Pageable.ofSize(pageSize).withPage(pageNum));
+    List<GroupMemberUser> memberUsers = page.getContent().parallelStream()
+        .map(member -> {
+          User user = userService.getById(member.getUserId());
+          Group group = new Group();
+          group.setId(member.getGroupId());
+          return GroupMemberUser.build(group, user);
+        })
+        .toList();
+    return new PageImpl<>(memberUsers, page.getPageable(), page.getTotalElements());
   }
 }

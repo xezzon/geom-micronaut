@@ -1,8 +1,10 @@
 package io.github.xezzon.geom.auth.service;
 
 import io.github.xezzon.geom.auth.domain.Group;
+import io.github.xezzon.geom.auth.domain.GroupMemberUser;
 import java.util.Collection;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * @author xezzon
@@ -43,4 +45,13 @@ public interface GroupService {
    * @return 被加密的密钥（Hex编码）
    */
   byte[] refreshSecretKey(String groupId, String publicKey);
+
+  /**
+   * 查询用户组成员
+   * @param groupId 用户组主键
+   * @param pageNum 页码 从0开始
+   * @param pageSize 页大小
+   * @return 用户组成员
+   */
+  Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, int pageSize);
 }

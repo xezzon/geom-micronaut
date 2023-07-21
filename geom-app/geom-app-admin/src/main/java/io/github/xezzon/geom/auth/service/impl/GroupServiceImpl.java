@@ -126,4 +126,13 @@ public class GroupServiceImpl implements GroupService {
         .toList();
     return new PageImpl<>(memberUsers, page.getPageable(), page.getTotalElements());
   }
+
+  @Override
+  public int removeMember(String groupId, Collection<String> membersId) {
+    Group group = groupDAO.get().findById(groupId)
+        .orElseThrow(() -> new ClientException("用户组不存在"));
+    return groupMemberDAO.get().deleteByIdInAndGroupIdAndUserIdNot(
+        membersId, groupId, group.getOwnerId()
+    );
+  }
 }

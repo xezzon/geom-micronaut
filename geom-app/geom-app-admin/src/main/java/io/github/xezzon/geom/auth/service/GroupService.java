@@ -54,4 +54,12 @@ public interface GroupService {
    * @return 用户组成员
    */
   Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, int pageSize);
+
+  /**
+   * 批量移除用户组成员
+   * @param groupId 用户组主键
+   * @param membersId 用户组成员主键
+   * @return 移除数量
+   */
+  int removeMember(String groupId, Collection<String> membersId);
 }

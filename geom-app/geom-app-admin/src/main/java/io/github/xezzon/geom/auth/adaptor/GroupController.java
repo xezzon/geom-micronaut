@@ -63,6 +63,12 @@ public class GroupController {
     groupService.joinGroup(groupId, Collections.singleton(userId));
   }
 
+  /**
+   * 刷新用户组密钥
+   * @param id 用户组主键
+   * @param publicKey 非对称加密的公钥
+   * @return 加密后的用户组密钥
+   */
   @PatchMapping("/{id}/secret-key")
   public String refreshSecretKey(@PathVariable String id, String publicKey) {
     if (publicKey == null) {
@@ -72,6 +78,13 @@ public class GroupController {
     return HexUtil.encodeHexStr(bytes);
   }
 
+  /**
+   * 分页查询用户组成员
+   * @param id 用户组主键
+   * @param pageNum 页码
+   * @param pageSize 页大小
+   * @return 分页的用户组成员
+   */
   @GetMapping("/{id}/member")
   public Page<GroupMemberUser> listGroupMember(
       @PathVariable String id,
@@ -81,6 +94,11 @@ public class GroupController {
     return groupService.listGroupMember(id, pageNum - 1, pageSize);
   }
 
+  /**
+   * 将成员批量移出用户组
+   * @param groupId 用户组主键
+   * @param membersId 用户组成员主键
+   */
   @DeleteMapping("/{groupId}/member")
   public void removeGroupMember(@PathVariable String groupId, @RequestBody List<String> membersId) {
     groupService.removeMember(groupId, membersId);

@@ -39,14 +39,6 @@ public interface GroupService {
   String generateSecretKey(String groupId);
 
   /**
-   * 客户端获取密钥
-   * @param groupId 用户组
-   * @param publicKey 客户端提供的加密公钥（PEM格式）
-   * @return 被加密的密钥（Hex编码）
-   */
-  byte[] refreshSecretKey(String groupId, String publicKey);
-
-  /**
    * 查询用户组成员
    * @param groupId 用户组主键
    * @param pageNum 页码 从0开始

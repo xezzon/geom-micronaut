@@ -111,18 +111,6 @@ class GroupServiceTest {
   }
 
   @Test
-  void refreshSecretKey() {
-    final Group group = RandomUtil.randomEle(GROUPS);
-    RSA rsa = new RSA();
-    byte[] decryptedSecretKey = service.refreshSecretKey(
-        group.getId(), PemUtil.toPem(KeyType.PublicKey.name(), rsa.getPublicKey().getEncoded())
-    );
-    String secretKey = new String(rsa.decrypt(decryptedSecretKey, KeyType.PrivateKey));
-    Group entity = groupRepository.findById(group.getId()).get();
-    Assertions.assertEquals(entity.getSecretKey(), secretKey);
-  }
-
-  @Test
   void listGroupByUserId() {
     final String userId = RandomUtil.randomEle(GROUP_MEMBERS).getUserId();
     List<Group> groups = service.listGroupByUserId(userId);

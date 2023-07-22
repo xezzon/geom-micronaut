@@ -2,11 +2,15 @@ package io.github.xezzon.geom.auth.adaptor;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.HexUtil;
+import cn.hutool.crypto.PemUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMemberUser;
 import io.github.xezzon.geom.auth.domain.query.AddGroupQuery;
 import io.github.xezzon.geom.auth.service.GroupService;
 import io.github.xezzon.tao.exception.ServerException;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -74,8 +78,11 @@ public class GroupController {
     if (publicKey == null) {
       throw new ServerException("缺少参数，无法生成密钥");
     }
-    byte[] bytes = groupService.refreshSecretKey(id, publicKey);
-    return HexUtil.encodeHexStr(bytes);
+    String secretKey = groupService.generateSecretKey(id);
+    RSA rsa = new RSA(
+        null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
+    );
+    return HexUtil.encodeHexStr(rsa.encrypt(secretKey, KeyType.PublicKey));
   }
 
   /**

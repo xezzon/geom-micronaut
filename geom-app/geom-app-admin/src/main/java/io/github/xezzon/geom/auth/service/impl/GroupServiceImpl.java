@@ -1,8 +1,5 @@
 package io.github.xezzon.geom.auth.service.impl;
 
-import cn.hutool.crypto.PemUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMember;
 import io.github.xezzon.geom.auth.domain.GroupMemberUser;
@@ -13,7 +10,6 @@ import io.github.xezzon.geom.auth.service.GroupService;
 import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.exception.ServerException;
-import java.io.StringReader;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
 import java.util.Collection;
@@ -111,18 +107,6 @@ public class GroupServiceImpl implements GroupService {
     } catch (GeneralSecurityException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Override
-  public byte[] refreshSecretKey(String groupId, String publicKey) {
-    /* TODO: 校验用户是否可以刷新密钥 */
-    /* 生成密钥并保存 */
-    String secretKey = this.generateSecretKey(groupId);
-    /* 将密钥进行非对称加密 */
-    RSA rsa = new RSA(
-        null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
-    );
-    return rsa.encrypt(secretKey, KeyType.PublicKey);
   }
 
   @Override

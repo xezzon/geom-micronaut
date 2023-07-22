@@ -26,6 +26,7 @@
     <!--依赖版本-->
     <sa-token.version>1.34.0</sa-token.version>
     <forest.version>1.5.30</forest.version>
+    <bouncy-castle.version>1.74</bouncy-castle.version>
   </properties>
 
   <dependencyManagement>
@@ -45,6 +46,11 @@
         <groupId>cn.dev33</groupId>
         <artifactId>sa-token-dao-redis-jackson</artifactId>
         <version>${sa-token.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk18on</artifactId>
+        <version>${bouncy-castle.version}</version>
       </dependency>
       <!-- 二方包 -->
       <dependency>

@@ -53,7 +53,7 @@ public interface GroupService {
    * @param pageSize 页大小
    * @return 用户组成员
    */
-  Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, int pageSize);
+  Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, short pageSize);
 
   /**
    * 批量移除用户组成员

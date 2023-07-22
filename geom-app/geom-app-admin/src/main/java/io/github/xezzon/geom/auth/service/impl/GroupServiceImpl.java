@@ -1,6 +1,5 @@
 package io.github.xezzon.geom.auth.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -20,8 +19,12 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -49,13 +52,23 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public List<Group> listGroupByUserId(String userId) {
-    return groupDAO.get().findByOwnerId(userId);
+    if (userId == null) {
+      return Collections.emptyList();
+    }
+    GroupMember probe = new GroupMember();
+    probe.setUserId(userId);
+    List<GroupMember> members = groupMemberDAO.get().findAll(Example.of(probe));
+    if (members.isEmpty()) {
+      return Collections.emptyList();
+    }
+    Set<String> groupsId = members.parallelStream()
+        .map(GroupMember::getGroupId)
+        .collect(Collectors.toSet());
+    return groupDAO.get().findByIdIn(groupsId);
   }
 
   @Override
   public void addGroup(Group group) {
-    /* 前置处理 */
-    group.setOwnerId(StpUtil.getLoginId(null));
     // 检查重复项
     if (groupDAO.get().existsByCodeAndOwnerId(group.getCode(), group.getOwnerId())) {
       throw new ClientException("用户组" + group.getCode() + "已存在");
@@ -113,16 +126,20 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, int pageSize) {
+  public Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, short pageSize) {
     Page<GroupMember> page = groupMemberDAO.get()
         .findByGroupId(groupId, Pageable.ofSize(pageSize).withPage(pageNum));
     List<GroupMemberUser> memberUsers = page.getContent().parallelStream()
         .map(member -> {
           User user = userService.getById(member.getUserId());
+          if (user == null) {
+            return null;
+          }
           Group group = new Group();
           group.setId(member.getGroupId());
           return GroupMemberUser.build(group, user);
         })
+        .filter(Objects::nonNull)
         .toList();
     return new PageImpl<>(memberUsers, page.getPageable(), page.getTotalElements());
   }

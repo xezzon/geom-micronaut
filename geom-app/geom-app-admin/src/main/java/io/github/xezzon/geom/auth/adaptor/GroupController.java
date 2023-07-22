@@ -48,7 +48,9 @@ public class GroupController {
    */
   @PostMapping()
   public void addGroup(@RequestBody AddGroupQuery query) {
-    groupService.addGroup(query.to());
+    Group group = query.to();
+    group.setOwnerId(StpUtil.getLoginId(null));
+    groupService.addGroup(group);
   }
 
   /**
@@ -74,7 +76,7 @@ public class GroupController {
   public Page<GroupMemberUser> listGroupMember(
       @PathVariable String id,
       @RequestParam(required = false, defaultValue = "1") int pageNum,
-      @RequestParam(required = false, defaultValue = "15") int pageSize
+      @RequestParam(required = false, defaultValue = "15") short pageSize
   ) {
     return groupService.listGroupMember(id, pageNum - 1, pageSize);
   }

@@ -5,9 +5,6 @@ import static io.github.xezzon.geom.TestData.GROUP_MEMBERS;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.crypto.PemUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
-import cn.hutool.crypto.asymmetric.RSA;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMember;
 import io.github.xezzon.geom.auth.domain.GroupMemberUser;
@@ -34,6 +31,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -48,6 +46,7 @@ class GroupServiceTest {
   private transient GroupMemberRepository memberRepository;
 
   @Test
+  @Transactional
   void addGroup() {
     Group group = new Group();
     String flakeId = IdUtil.getSnowflakeNextIdStr();
@@ -65,6 +64,7 @@ class GroupServiceTest {
   }
 
   @Test
+  @Transactional
   void addGroup_repeat() {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -78,6 +78,7 @@ class GroupServiceTest {
   }
 
   @RepeatedTest(2)
+  @Transactional
   void joinGroup() {
     final Group group = RandomUtil.randomEle(GROUPS);
     List<String> usersId = IntStream.range(1, 100)
@@ -92,6 +93,7 @@ class GroupServiceTest {
   }
 
   @Test
+  @Transactional
   void generateSecretKey() throws GeneralSecurityException {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -145,6 +147,7 @@ class GroupServiceTest {
   }
 
   @Test
+  @Transactional
   void removeMember() {
     // 获取某一用户组部分人员、另一用户组随机一位用户
     Group group = RandomUtil.randomEle(GROUPS);

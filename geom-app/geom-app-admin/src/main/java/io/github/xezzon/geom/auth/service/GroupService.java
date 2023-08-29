@@ -2,9 +2,9 @@ package io.github.xezzon.geom.auth.service;
 
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMemberUser;
+import io.micronaut.data.model.Page;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.data.domain.Page;
 
 /**
  * @author xezzon

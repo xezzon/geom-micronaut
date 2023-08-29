@@ -6,20 +6,17 @@ import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.service.AuthService;
 import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.exception.ClientException;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import io.micronaut.context.annotation.Bean;
 
 /**
  * @author xezzon
  */
-@Service
+@Bean
 public class AuthServiceImpl implements AuthService {
 
   private final transient UserService userService;
 
-  public AuthServiceImpl(
-      @Lazy UserService userService
-  ) {
+  public AuthServiceImpl(UserService userService) {
     this.userService = userService;
   }
 

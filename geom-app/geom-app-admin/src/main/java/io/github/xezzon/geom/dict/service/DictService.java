@@ -2,8 +2,8 @@ package io.github.xezzon.geom.dict.service;
 
 import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.tao.retrieval.CommonQuery;
+import io.micronaut.data.model.Page;
 import java.util.List;
-import org.springframework.data.domain.Page;
 
 /**
  * @author xezzon

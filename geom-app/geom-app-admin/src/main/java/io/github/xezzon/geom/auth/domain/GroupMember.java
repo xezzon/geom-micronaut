@@ -3,8 +3,8 @@ package io.github.xezzon.geom.auth.domain;
 import static io.github.xezzon.geom.auth.domain.GroupMember.GROUP_ID;
 import static io.github.xezzon.geom.auth.domain.GroupMember.USER_ID;
 import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_NAME;
-import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_STRATEGY;
 
+import io.github.xezzon.geom.manager.HibernateIdGenerator;
 import io.github.xezzon.tao.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,7 +42,10 @@ public class GroupMember extends BaseEntity<String> {
    */
   @Id
   @Column(unique = true, nullable = false, updatable = false, length = BaseEntity.ID_LENGTH)
-  @GenericGenerator(name = GENERATOR_NAME, strategy = GENERATOR_STRATEGY)
+  @GenericGenerator(
+      name = HibernateIdGenerator.GENERATOR_NAME,
+      type = HibernateIdGenerator.class
+  )
   @GeneratedValue(generator = GENERATOR_NAME)
   private String id;
   /**

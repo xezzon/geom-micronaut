@@ -1,26 +1,28 @@
 package io.github.xezzon.geom.manager;
 
-import io.github.xezzon.tao.manager.IdGenerator;
+import io.github.xezzon.tao.data.IdGenerator;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import java.io.Serial;
 import java.io.Serializable;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * ID 生成策略
  * @author xezzon
  */
-@Component
+@Singleton
 public class HibernateIdGenerator implements IdentifierGenerator {
 
+  @Serial
+  private static final long serialVersionUID = 8170001034547524651L;
   public static final String GENERATOR_NAME = "id-generator";
-  public static final String GENERATOR_STRATEGY
-      = "io.github.xezzon.geom.manager.HibernateIdGenerator";
+
   private final transient IdGenerator idGenerator;
 
-  @Autowired
+  @Inject
   public HibernateIdGenerator(IdGenerator idGenerator) {
     this.idGenerator = idGenerator;
   }

@@ -1,12 +1,12 @@
 package io.github.xezzon.geom.constant;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Value;
 
 /**
  * @author xezzon
  */
-@Configuration
+@Factory
 public class StaticConstants {
 
   private static String hashidsSalt = "hashids";

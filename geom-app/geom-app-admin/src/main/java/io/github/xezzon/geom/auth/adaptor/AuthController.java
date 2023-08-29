@@ -8,24 +8,22 @@ import io.github.xezzon.geom.auth.domain.query.RegisterQuery;
 import io.github.xezzon.geom.auth.service.AuthService;
 import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.logger.LogRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import jakarta.inject.Inject;
 
 /**
  * @author xezzon
  */
-@RestController
-@RequestMapping
+@Controller
 public class AuthController {
 
   private final transient UserService userService;
   private final transient AuthService authService;
 
-  @Autowired
+  @Inject
   public AuthController(
       UserService userService,
       AuthService authService
@@ -34,8 +32,8 @@ public class AuthController {
     this.authService = authService;
   }
 
-  @PostMapping("/register")
-  public User register(@RequestBody RegisterQuery user) {
+  @Post("/register")
+  public User register(@Body RegisterQuery user) {
     return userService.register(user.to());
   }
 
@@ -43,9 +41,9 @@ public class AuthController {
    * 用户登录
    * @param user 用户名 密码
    */
-  @PostMapping("/login")
+  @Post("/login")
   @LogRecord
-  public SaTokenInfo login(@RequestBody User user) {
+  public SaTokenInfo login(@Body User user) {
     authService.login(user.getUsername(), user.getPlaintext());
     return StpUtil.getTokenInfo();
   }
@@ -54,7 +52,7 @@ public class AuthController {
    * 查询当前登录用户
    * @return 当前用户账号信息
    */
-  @GetMapping("/me")
+  @Get("/me")
   @SaCheckLogin
   public User getCurrentUser() {
     return userService.getById(StpUtil.getLoginId(null));
@@ -63,7 +61,7 @@ public class AuthController {
   /**
    * 退出登录
    */
-  @PostMapping("/logout")
+  @Post("/logout")
   public void logout() {
     StpUtil.logout();
   }

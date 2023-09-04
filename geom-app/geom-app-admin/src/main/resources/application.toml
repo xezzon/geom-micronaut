@@ -1,0 +1,21 @@
+[micronaut]
+environments = "${MICRONAUT_ENVIRONMENTS}"
+[micronaut.application]
+name = "geom-app-admin"
+[micronaut.server]
+port = "@app.port@"
+
+[jackson]
+date-format = "yyyy-MM-dd HH:mm:ss"
+[jackson.deserialization]
+FAIL_ON_UNKNOWN_PROPERTIES = false
+
+[jpa]
+[jpa.default.properties.hibernate]
+show_sql = true
+format_sql = true
+cdi.extensions = true
+
+[geom]
+[geom.system]
+id-generator = "${ID_GENERATOR:snowflake}"

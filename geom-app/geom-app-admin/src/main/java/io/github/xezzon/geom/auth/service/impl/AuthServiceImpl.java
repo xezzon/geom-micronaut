@@ -14,7 +14,7 @@ import io.micronaut.context.annotation.Bean;
 @Bean
 public class AuthServiceImpl implements AuthService {
 
-  private final transient UserService userService;
+  protected final transient UserService userService;
 
   public AuthServiceImpl(UserService userService) {
     this.userService = userService;

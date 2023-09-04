@@ -5,6 +5,7 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.jpa.repository.JpaRepository;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author xezzon
@@ -13,7 +14,7 @@ import java.util.List;
 public interface DictRepository
     extends JpaRepository<Dict, String> {
 
-  Dict findByTagAndCode(String tag, String code);
+  Optional<Dict> findByTagAndCode(String tag, String code);
 
   List<Dict> findByTag(String tag);
 

@@ -30,9 +30,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 @Singleton
 public class GroupServiceImpl implements GroupService {
 
-  private final transient GroupDAO groupDAO;
-  private final transient GroupMemberDAO groupMemberDAO;
-  private final transient UserService userService;
+  protected final transient GroupDAO groupDAO;
+  protected final transient GroupMemberDAO groupMemberDAO;
+  protected final transient UserService userService;
 
   public GroupServiceImpl(
       GroupDAO groupDAO,

@@ -11,7 +11,9 @@ import io.github.xezzon.geom.auth.domain.GroupMemberUser;
 import io.github.xezzon.geom.auth.repository.GroupMemberRepository;
 import io.github.xezzon.geom.auth.repository.GroupRepository;
 import io.github.xezzon.tao.exception.ClientException;
-import jakarta.annotation.Resource;
+import io.micronaut.data.model.Page;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -26,27 +28,18 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
-@TestInstance(Lifecycle.PER_CLASS)
-@SpringBootTest
-@ActiveProfiles("test")
+@MicronautTest
 class GroupServiceTest {
 
-  @Resource
-  private transient GroupService service;
-  @Resource
-  private transient GroupRepository groupRepository;
-  @Resource
-  private transient GroupMemberRepository memberRepository;
+  @Inject
+  protected transient GroupService service;
+  @Inject
+  protected transient GroupRepository groupRepository;
+  @Inject
+  protected transient GroupMemberRepository memberRepository;
 
   @Test
-  @Transactional
   void addGroup() {
     Group group = new Group();
     String flakeId = IdUtil.getSnowflakeNextIdStr();
@@ -64,7 +57,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void addGroup_repeat() {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -78,7 +70,6 @@ class GroupServiceTest {
   }
 
   @RepeatedTest(2)
-  @Transactional
   void joinGroup() {
     final Group group = RandomUtil.randomEle(GROUPS);
     List<String> usersId = IntStream.range(1, 100)
@@ -93,7 +84,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void generateSecretKey() throws GeneralSecurityException {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -134,7 +124,7 @@ class GroupServiceTest {
     Page<GroupMemberUser> groupMemberUsers = service.listGroupMember(
         group.getId(), 0, Short.MAX_VALUE
     );
-    String[] usersId = groupMemberUsers.stream().parallel()
+    String[] usersId = groupMemberUsers.getContent().stream().parallel()
         .map(GroupMemberUser::getUserId)
         .sorted()
         .toArray(String[]::new);
@@ -147,7 +137,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void removeMember() {
     // 获取某一用户组部分人员、另一用户组随机一位用户
     Group group = RandomUtil.randomEle(GROUPS);

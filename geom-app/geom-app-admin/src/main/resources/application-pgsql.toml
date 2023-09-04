@@ -1,0 +1,8 @@
+[datasources]
+[datasources.default]
+url = "jdbc:postgresql://${DB_URL:pgsql:5432/geom}"
+username = "${DB_USERNAME}"
+password = "${DB_PASSWORD}"
+driverClassName = "org.postgresql.Driver"
+db-type = "postgres"
+dialect = "POSTGRES"

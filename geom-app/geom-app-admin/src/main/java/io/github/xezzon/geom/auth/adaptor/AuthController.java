@@ -20,8 +20,8 @@ import jakarta.inject.Inject;
 @Controller
 public class AuthController {
 
-  private final transient UserService userService;
-  private final transient AuthService authService;
+  protected final transient UserService userService;
+  protected final transient AuthService authService;
 
   @Inject
   public AuthController(

@@ -3,29 +3,26 @@ package io.github.xezzon.geom.auth.service;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.BCrypt;
-import io.github.xezzon.geom.auth.domain.QUser;
 import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.repository.UserRepository;
 import io.github.xezzon.tao.exception.BaseException;
-import jakarta.annotation.Resource;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 /**
  * @author xezzon
  */
-@SpringBootTest
-@ActiveProfiles("test")
+@MicronautTest
 class UserServiceTest {
 
-  @Resource
-  private transient UserService userService;
-  @Resource
-  private transient UserRepository userRepository;
+  @Inject
+  protected transient UserService userService;
+  @Inject
+  protected transient UserRepository userRepository;
 
   @Test
   void register() {
@@ -40,7 +37,7 @@ class UserServiceTest {
     Assertions.assertNotNull(register.getNickname());
     Assertions.assertNull(register.getCipher());
     /* 测试结果 */
-    Optional<User> existUser = userRepository.findOne(QUser.user.username.eq(user.getUsername()));
+    Optional<User> existUser = userRepository.findByUsername(user.getUsername());
     Assertions.assertTrue(existUser.isPresent());
     Assertions.assertTrue(
         BCrypt.checkpw(user.getPlaintext(), existUser.get().getCipher())

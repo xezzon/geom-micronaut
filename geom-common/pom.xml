@@ -46,4 +46,54 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>micronaut-maven-plugin</artifactId>
+        <groupId>io.micronaut.maven</groupId>
+        <version>${micronaut.version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths combine.children="append">
+            <path>
+              <artifactId>lombok</artifactId>
+              <groupId>org.projectlombok</groupId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-inject-java</artifactId>
+              <groupId>io.micronaut</groupId>
+              <version>${micronaut.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-data-processor</artifactId>
+              <exclusions>
+                <exclusion>
+                  <artifactId>micronaut-inject</artifactId>
+                  <groupId>io.micronaut</groupId>
+                </exclusion>
+              </exclusions>
+              <groupId>io.micronaut.data</groupId>
+              <version>${micronaut.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-serde-processor</artifactId>
+              <exclusions>
+                <exclusion>
+                  <artifactId>micronaut-inject</artifactId>
+                  <groupId>io.micronaut</groupId>
+                </exclusion>
+              </exclusions>
+              <groupId>io.micronaut.serde</groupId>
+              <version>${micronaut.serde.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+    </plugins>
+  </build>
 </project>

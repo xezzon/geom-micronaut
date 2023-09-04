@@ -32,7 +32,7 @@
     <!-- 认证模块依赖 -->
     <dependency>
       <groupId>cn.dev33</groupId>
-      <artifactId>sa-token-servlet</artifactId>
+      <artifactId>sa-token-jakarta-servlet</artifactId>
     </dependency>
   </dependencies>
 </project>

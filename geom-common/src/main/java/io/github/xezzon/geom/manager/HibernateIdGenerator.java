@@ -20,7 +20,7 @@ public class HibernateIdGenerator implements IdentifierGenerator {
   private static final long serialVersionUID = 8170001034547524651L;
   public static final String GENERATOR_NAME = "id-generator";
 
-  private final transient IdGenerator idGenerator;
+  protected final transient IdGenerator idGenerator;
 
   @Inject
   public HibernateIdGenerator(IdGenerator idGenerator) {

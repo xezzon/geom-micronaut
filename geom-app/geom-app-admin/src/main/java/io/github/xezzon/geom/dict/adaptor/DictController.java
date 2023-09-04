@@ -23,7 +23,7 @@ import java.util.List;
 @Controller("/dict")
 public class DictController {
 
-  private final transient DictService dictService;
+  protected final transient DictService dictService;
 
   public DictController(DictService dictService) {
     this.dictService = dictService;
@@ -51,7 +51,7 @@ public class DictController {
   /**
    * 查询字典目下的字典集合
    */
-  @Get("/tag")
+  @Get()
   @LogRecord
   public List<? extends TreeNode<Dict, ?>> dictListByTag(@QueryValue String tag) {
     return dictService.dictListByTag(tag);

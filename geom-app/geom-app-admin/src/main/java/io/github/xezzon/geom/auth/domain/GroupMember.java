@@ -2,7 +2,6 @@ package io.github.xezzon.geom.auth.domain;
 
 import static io.github.xezzon.geom.auth.domain.GroupMember.GROUP_ID;
 import static io.github.xezzon.geom.auth.domain.GroupMember.USER_ID;
-import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_NAME;
 
 import io.github.xezzon.geom.manager.HibernateIdGenerator;
 import io.github.xezzon.tao.jpa.BaseEntity;
@@ -46,7 +45,7 @@ public class GroupMember extends BaseEntity<String> {
       name = HibernateIdGenerator.GENERATOR_NAME,
       type = HibernateIdGenerator.class
   )
-  @GeneratedValue(generator = GENERATOR_NAME)
+  @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
   private String id;
   /**
    * 用户组主键

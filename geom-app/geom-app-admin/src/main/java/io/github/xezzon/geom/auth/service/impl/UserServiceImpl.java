@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 @Bean
 public class UserServiceImpl implements UserService {
 
-  private final transient UserDAO userDAO;
+  protected final transient UserDAO userDAO;
 
   public UserServiceImpl(UserDAO userDAO) {
     this.userDAO = userDAO;
@@ -52,6 +52,6 @@ public class UserServiceImpl implements UserService {
     if (username == null) {
       return null;
     }
-    return userDAO.get().findByUsername(username);
+    return userDAO.get().findByUsername(username).orElse(null);
   }
 }

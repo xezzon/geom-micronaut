@@ -1,6 +1,6 @@
 package io.github.xezzon.geom.config;
 
-import io.github.xezzon.geom.constant.SpringConstants;
+import io.github.xezzon.geom.constant.PropertyKeys;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Factory;
 import lombok.Getter;
@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Factory
-@ConfigurationProperties(SpringConstants.GEOM_SYSTEM)
+@ConfigurationProperties(PropertyKeys.GEOM_SYSTEM)
 public class GeomSystemConfig {
 
+  protected String idGenerator;
 }

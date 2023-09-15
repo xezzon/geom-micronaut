@@ -5,27 +5,25 @@ import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.github.xezzon.tao.tree.TreeNode;
+import io.micronaut.data.model.Page;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
+import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author xezzon
  */
-@RestController
-@RequestMapping("/dict")
+@Controller("/dict")
 public class DictController {
 
-  private final transient DictService dictService;
+  protected final transient DictService dictService;
 
   public DictController(DictService dictService) {
     this.dictService = dictService;
@@ -34,7 +32,7 @@ public class DictController {
   /**
    * 分页查询字典目
    */
-  @GetMapping("/tag")
+  @Get("/tag")
   @LogRecord
   public Page<Dict> dictTagPage(CommonQuery params) {
     return dictService.dictTagPage(params);
@@ -44,18 +42,18 @@ public class DictController {
    * 新增字典/字典目
    * @param dict 字典信息
    */
-  @PostMapping()
+  @Post()
   @LogRecord
-  public void addDict(@RequestBody @Validated Dict dict) {
+  public void addDict(@Body @Valid Dict dict) {
     dictService.addDict(dict);
   }
 
   /**
    * 查询字典目下的字典集合
    */
-  @GetMapping(params = {"tag"})
+  @Get()
   @LogRecord
-  public List<? extends TreeNode<Dict, ?>> dictListByTag(@RequestParam String tag) {
+  public List<? extends TreeNode<Dict, ?>> dictListByTag(@QueryValue String tag) {
     return dictService.dictListByTag(tag);
   }
 
@@ -65,19 +63,19 @@ public class DictController {
    * @param code 字典码
    * @return 字典信息
    */
-  @GetMapping(params = {"tag", "code"})
+  @Get("/tag-code")
   @LogRecord
-  public Dict dictByTagAndCode(@RequestParam String tag, @RequestParam String code) {
+  public Dict dictByTagAndCode(@QueryValue String tag, @QueryValue String code) {
     return dictService.dictByTagAndCode(tag, code);
   }
 
-  @DeleteMapping("/{id}")
+  @Delete("/{id}")
   public void remove(@PathVariable String id) {
     dictService.removeDict(id);
   }
 
-  @PutMapping()
-  public void modifyDict(@RequestBody @Validated Dict dict) {
+  @Put()
+  public void modifyDict(@Body @Valid Dict dict) {
     dictService.modifyDict(dict);
   }
 }

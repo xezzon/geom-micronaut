@@ -20,7 +20,7 @@
     <!-- 二方依赖 -->
     <dependency>
       <groupId>io.github.xezzon</groupId>
-      <artifactId>tao-spring-boot-starter</artifactId>
+      <artifactId>micronaut-tao</artifactId>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

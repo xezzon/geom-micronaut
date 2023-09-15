@@ -4,23 +4,21 @@ import cn.hutool.crypto.digest.BCrypt;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.xezzon.geom.constant.DatabaseConstant;
 import io.github.xezzon.geom.manager.HibernateIdGenerator;
-import java.time.LocalDateTime;
+import io.micronaut.data.annotation.DateCreated;
+import io.micronaut.data.annotation.DateUpdated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 用户
@@ -32,7 +30,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Accessors(chain = true)
 @Entity
 @Table(name = "geom_user")
-@EntityListeners(AuditingEntityListener.class)
 public class User {
 
   /**
@@ -42,7 +39,7 @@ public class User {
   @Column(name = "id", nullable = false, updatable = false, length = DatabaseConstant.ID_LENGTH)
   @GenericGenerator(
       name = HibernateIdGenerator.GENERATOR_NAME,
-      strategy = HibernateIdGenerator.GENERATOR_STRATEGY
+      type = HibernateIdGenerator.class
   )
   @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
   private String id;
@@ -76,14 +73,14 @@ public class User {
   /**
    * 记录创建时间
    */
-  @CreatedDate
+  @DateCreated
   @Column(name = "create_time", nullable = false, updatable = false)
   private LocalDateTime createTime;
 
   /**
    * 最后更新时间
    */
-  @LastModifiedDate
+  @DateUpdated
   @Column(name = "update_time", nullable = false)
   private LocalDateTime updateTime;
 

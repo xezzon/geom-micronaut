@@ -5,6 +5,7 @@ import static io.github.xezzon.geom.constant.PatternConstants.PASSWORD_PATTERN;
 import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.trait.IConverter;
 import io.github.xezzon.geom.trait.IQuery;
+import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,6 @@ import lombok.ToString;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author xezzon
@@ -20,7 +20,7 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @ToString
-@Validated
+@Introspected
 public class RegisterQuery implements IQuery<User> {
 
   /**

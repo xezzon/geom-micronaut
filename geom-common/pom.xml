@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.xezzon</groupId>
+    <artifactId>geom</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>geom-common</artifactId>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.github.xezzon</groupId>
+      <artifactId>geom-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <!-- HTTP依赖 -->
+    <dependency>
+      <groupId>io.micronaut</groupId>
+      <artifactId>micronaut-http</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.serde</groupId>
+      <artifactId>micronaut-serde-jackson</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- 数据库相关 -->
+    <dependency>
+      <groupId>io.micronaut.data</groupId>
+      <artifactId>micronaut-data-hibernate-jpa</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- 工具类 -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>micronaut-maven-plugin</artifactId>
+        <groupId>io.micronaut.maven</groupId>
+        <version>${micronaut.version}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths combine.children="append">
+            <path>
+              <artifactId>lombok</artifactId>
+              <groupId>org.projectlombok</groupId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-inject-java</artifactId>
+              <groupId>io.micronaut</groupId>
+              <version>${micronaut.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-data-processor</artifactId>
+              <exclusions>
+                <exclusion>
+                  <artifactId>micronaut-inject</artifactId>
+                  <groupId>io.micronaut</groupId>
+                </exclusion>
+              </exclusions>
+              <groupId>io.micronaut.data</groupId>
+              <version>${micronaut.version}</version>
+            </path>
+            <path>
+              <artifactId>micronaut-serde-processor</artifactId>
+              <exclusions>
+                <exclusion>
+                  <artifactId>micronaut-inject</artifactId>
+                  <groupId>io.micronaut</groupId>
+                </exclusion>
+              </exclusions>
+              <groupId>io.micronaut.serde</groupId>
+              <version>${micronaut.serde.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

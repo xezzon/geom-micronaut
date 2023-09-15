@@ -10,6 +10,9 @@ import io.github.xezzon.geom.auth.service.GroupService;
 import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.exception.ServerException;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import jakarta.inject.Singleton;
 import java.security.GeneralSecurityException;
 import java.util.Base64;
 import java.util.Collection;
@@ -20,21 +23,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 /**
  * @author xezzon
  */
-@Service
+@Singleton
 public class GroupServiceImpl implements GroupService {
 
-  private final transient GroupDAO groupDAO;
-  private final transient GroupMemberDAO groupMemberDAO;
-  private final transient UserService userService;
+  protected final transient GroupDAO groupDAO;
+  protected final transient GroupMemberDAO groupMemberDAO;
+  protected final transient UserService userService;
 
   public GroupServiceImpl(
       GroupDAO groupDAO,
@@ -51,9 +49,7 @@ public class GroupServiceImpl implements GroupService {
     if (userId == null) {
       return Collections.emptyList();
     }
-    GroupMember probe = new GroupMember();
-    probe.setUserId(userId);
-    List<GroupMember> members = groupMemberDAO.get().findAll(Example.of(probe));
+    List<GroupMember> members = groupMemberDAO.get().findByUserId(userId);
     if (members.isEmpty()) {
       return Collections.emptyList();
     }
@@ -112,7 +108,7 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public Page<GroupMemberUser> listGroupMember(String groupId, int pageNum, short pageSize) {
     Page<GroupMember> page = groupMemberDAO.get()
-        .findByGroupId(groupId, Pageable.ofSize(pageSize).withPage(pageNum));
+        .findByGroupId(groupId, Pageable.from(pageNum, pageSize));
     List<GroupMemberUser> memberUsers = page.getContent().parallelStream()
         .map(member -> {
           User user = userService.getById(member.getUserId());
@@ -125,7 +121,7 @@ public class GroupServiceImpl implements GroupService {
         })
         .filter(Objects::nonNull)
         .toList();
-    return new PageImpl<>(memberUsers, page.getPageable(), page.getTotalElements());
+    return Page.of(memberUsers, page.getPageable(), page.getTotalSize());
   }
 
   @Override

@@ -4,7 +4,7 @@ import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.dict.domain.QDict;
 import io.github.xezzon.geom.dict.repository.DictRepository;
 import io.github.xezzon.tao.jpa.BaseJpaWrapper;
-import org.springframework.stereotype.Repository;
+import io.micronaut.data.annotation.Repository;
 
 /**
  * @author xezzon

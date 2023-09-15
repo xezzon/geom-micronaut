@@ -1,20 +1,22 @@
 package io.github.xezzon.geom.auth.service;
 
-import static io.github.xezzon.geom.TestData.GROUPS;
-import static io.github.xezzon.geom.TestData.GROUP_MEMBERS;
-
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import io.github.xezzon.geom.auth.domain.Group;
 import io.github.xezzon.geom.auth.domain.GroupMember;
 import io.github.xezzon.geom.auth.domain.GroupMemberUser;
+import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.repository.GroupMemberRepository;
 import io.github.xezzon.geom.auth.repository.GroupRepository;
+import io.github.xezzon.geom.auth.repository.UserRepository;
 import io.github.xezzon.tao.exception.ClientException;
-import jakarta.annotation.Resource;
+import io.micronaut.data.model.Page;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,29 +26,72 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
+@MicronautTest
 @TestInstance(Lifecycle.PER_CLASS)
-@SpringBootTest
-@ActiveProfiles("test")
 class GroupServiceTest {
 
-  @Resource
-  private transient GroupService service;
-  @Resource
-  private transient GroupRepository groupRepository;
-  @Resource
-  private transient GroupMemberRepository memberRepository;
+  private static final List<User> USERS = new ArrayList<>();
+  private static final List<Group> GROUPS = new ArrayList<>();
+  private static final List<GroupMember> GROUP_MEMBERS = new ArrayList<>();
+
+  @Inject
+  protected transient GroupService service;
+  @Inject
+  protected transient GroupRepository groupRepository;
+  @Inject
+  protected transient GroupMemberRepository memberRepository;
+  @Inject
+  protected transient UserRepository userRepository;
+
+  @BeforeAll
+  public void init() {
+    for (int i = 0; i < Byte.MAX_VALUE; i++) {
+      User user = new User();
+      user.setUsername(RandomUtil.randomString(6));
+      user.setNickname(RandomUtil.randomString(6));
+      user.setPlaintext(RandomUtil.randomString(6));
+      USERS.add(user);
+    }
+    userRepository.saveAll(USERS);
+    for (int i = 0; i < Byte.MAX_VALUE; i++) {
+      Group group = new Group();
+      group.setCode(RandomUtil.randomString(6));
+      group.setName(RandomUtil.randomString(6));
+      group.setOwnerId(RandomUtil.randomEle(USERS).getId());
+      GROUPS.add(group);
+    }
+    groupRepository.saveAll(GROUPS);
+    List<GroupMember> members = new ArrayList<>();
+    for (Group group : GROUPS) {
+      GroupMember member = new GroupMember();
+      member.setGroupId(group.getId());
+      member.setUserId(group.getOwnerId());
+      members.add(member);
+    }
+    for (int i = 0; i < GROUPS.size() * USERS.size(); i++) {
+      GroupMember member = new GroupMember();
+      member.setGroupId(RandomUtil.randomEle(GROUPS).getId());
+      member.setUserId(RandomUtil.randomEle(USERS).getId());
+      members.add(member);
+    }
+    Collection<GroupMember> distinctMembers = members.stream()
+        .collect(Collectors.toMap(
+            o -> o.getGroupId() + ":" + o.getUserId(),
+            o -> o,
+            (v1, v2) -> v1
+        ))
+        .values();
+    GROUP_MEMBERS.addAll(distinctMembers);
+    memberRepository.saveAll(GROUP_MEMBERS);
+  }
 
   @Test
-  @Transactional
   void addGroup() {
     Group group = new Group();
     String flakeId = IdUtil.getSnowflakeNextIdStr();
@@ -64,7 +109,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void addGroup_repeat() {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -78,7 +122,6 @@ class GroupServiceTest {
   }
 
   @RepeatedTest(2)
-  @Transactional
   void joinGroup() {
     final Group group = RandomUtil.randomEle(GROUPS);
     List<String> usersId = IntStream.range(1, 100)
@@ -93,7 +136,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void generateSecretKey() throws GeneralSecurityException {
     final Group group = RandomUtil.randomEle(GROUPS);
 
@@ -134,7 +176,7 @@ class GroupServiceTest {
     Page<GroupMemberUser> groupMemberUsers = service.listGroupMember(
         group.getId(), 0, Short.MAX_VALUE
     );
-    String[] usersId = groupMemberUsers.stream().parallel()
+    String[] usersId = groupMemberUsers.getContent().stream().parallel()
         .map(GroupMemberUser::getUserId)
         .sorted()
         .toArray(String[]::new);
@@ -147,7 +189,6 @@ class GroupServiceTest {
   }
 
   @Test
-  @Transactional
   void removeMember() {
     // 获取某一用户组部分人员、另一用户组随机一位用户
     Group group = RandomUtil.randomEle(GROUPS);

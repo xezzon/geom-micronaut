@@ -4,8 +4,8 @@ import io.github.xezzon.geom.auth.domain.GroupMember;
 import io.github.xezzon.geom.auth.domain.QGroupMember;
 import io.github.xezzon.geom.auth.repository.GroupMemberRepository;
 import io.github.xezzon.tao.jpa.BaseJpaWrapper;
+import io.micronaut.data.annotation.Repository;
 import java.util.Collection;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author xezzon

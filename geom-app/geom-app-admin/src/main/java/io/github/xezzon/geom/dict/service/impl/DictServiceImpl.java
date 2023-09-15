@@ -6,20 +6,21 @@ import io.github.xezzon.geom.dict.service.DictService;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.github.xezzon.tao.tree.Tree;
+import io.micronaut.data.model.Page;
+import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 /**
  * @author xezzon
  */
-@Service
+@Singleton
 public class DictServiceImpl implements DictService {
 
-  private final transient DictDAO dictDAO;
+  protected final transient DictDAO dictDAO;
 
   public DictServiceImpl(DictDAO dictDAO) {
     this.dictDAO = dictDAO;
@@ -32,8 +33,8 @@ public class DictServiceImpl implements DictService {
 
   @Override
   public void addDict(Dict dict) {
-    Dict exist = dictDAO.get().findByTagAndCode(dict.getTag(), dict.getCode());
-    if (exist != null) {
+    Optional<Dict> exist = dictDAO.get().findByTagAndCode(dict.getTag(), dict.getCode());
+    if (exist.isEmpty()) {
       throw new ClientException("字典码已存在");
     }
     dictDAO.get().save(dict);
@@ -53,7 +54,7 @@ public class DictServiceImpl implements DictService {
         .map(Dict::getId)
         .collect(Collectors.toSet());
     dictIdSet.add(id);
-    dictDAO.get().deleteAllByIdInBatch(dictIdSet);
+    dictDAO.get().deleteByIdIn(dictIdSet);
   }
 
   @Override
@@ -63,6 +64,6 @@ public class DictServiceImpl implements DictService {
 
   @Override
   public Dict dictByTagAndCode(String tag, String code) {
-    return dictDAO.get().findByTagAndCode(tag, code);
+    return dictDAO.get().findByTagAndCode(tag, code).orElse(null);
   }
 }

@@ -1,31 +1,23 @@
 package io.github.xezzon.geom;
 
-import io.github.xezzon.tao.logger.EnableLogRecord;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.runtime.Micronaut;
 
 /**
  * @author xezzon
  */
-@SpringBootApplication
-@EnableJpaAuditing
-@EnableLogRecord
 public class AdminApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(AdminApplication.class, args);
+    Micronaut.run(AdminApplication.class, args);
   }
 }
 
-@RequestMapping("/actuator")
-@RestController
+@Controller("/actuator")
 class ActuatorController {
 
-  @GetMapping("/health")
+  @Get("/health")
   public String health() {
     return "health";
   }

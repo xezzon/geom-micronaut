@@ -1,33 +1,28 @@
 package io.github.xezzon.geom.auth.service.impl;
 
-import io.github.xezzon.geom.auth.domain.QUser;
 import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.repository.wrapper.UserDAO;
 import io.github.xezzon.geom.auth.service.UserService;
 import io.github.xezzon.tao.exception.ClientException;
+import io.micronaut.context.annotation.Bean;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author xezzon
  */
-@Service
+@Bean
 public class UserServiceImpl implements UserService {
 
-  private final transient UserDAO userDAO;
+  protected final transient UserDAO userDAO;
 
-  @Autowired
-  public UserServiceImpl(
-      UserDAO userDAO
-  ) {
+  public UserServiceImpl(UserDAO userDAO) {
     this.userDAO = userDAO;
   }
 
   @Override
   public User register(@NotNull User user) {
     String username = user.getUsername();
-    boolean exists = userDAO.get().exists(QUser.user.username.eq(username));
+    boolean exists = userDAO.get().existsByUsername(username);
     if (exists) {
       throw new ClientException("用户名" + username + "已注册");
     }
@@ -57,6 +52,6 @@ public class UserServiceImpl implements UserService {
     if (username == null) {
       return null;
     }
-    return userDAO.get().findByUsername(username);
+    return userDAO.get().findByUsername(username).orElse(null);
   }
 }

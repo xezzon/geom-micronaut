@@ -1,8 +1,5 @@
 package io.github.xezzon.geom.auth.domain;
 
-import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_NAME;
-import static io.github.xezzon.geom.manager.HibernateIdGenerator.GENERATOR_STRATEGY;
-
 import cn.hutool.core.codec.Hashids;
 import cn.hutool.core.util.HexUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +38,10 @@ public class Group extends BaseEntity<String> {
    */
   @Id
   @Column(unique = true, nullable = false, updatable = false, length = BaseEntity.ID_LENGTH)
-  @GenericGenerator(name = GENERATOR_NAME, strategy = GENERATOR_STRATEGY)
+  @GenericGenerator(
+      name = HibernateIdGenerator.GENERATOR_NAME,
+      type = HibernateIdGenerator.class
+  )
   @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
   private String id;
   /**

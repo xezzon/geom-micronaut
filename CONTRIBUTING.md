@@ -11,19 +11,19 @@ geom
 ├── geom-app  # 服务目录
 │   ├── geom-app-admin  # 后台管理服务
 │   └── geom-app-openapi  # 开放接口服务
+├── geom-common  # 各服务共享的 bean
 ├── geom-core  # 用于存放一些共享的内容（如全局常量、DTO）
-├── geom-sdk  # 提供给系统内其他服务调用 geom 服务的客户端
-└── geom-spring-boot-starter  # 各服务共享的 bean
+└── geom-sdk  # 提供给系统内其他服务调用 geom 服务的客户端
 ```
 
 ### 模块间依赖关系
 
 ```mermaid
 flowchart LR
-    geom-app-admin-->geom-spring-boot-starter
-    geom-app-openapi-->geom-spring-boot-starter
+    geom-app-admin-->geom-common
+    geom-app-openapi-->geom-common
     geom-app-openapi-->geom-sdk
-    geom-spring-boot-starter-->geom-core
+    geom-common-->geom-core
     geom-sdk--> geom-core
 ```
 

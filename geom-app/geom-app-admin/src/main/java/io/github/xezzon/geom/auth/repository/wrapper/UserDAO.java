@@ -4,7 +4,7 @@ import io.github.xezzon.geom.auth.domain.QUser;
 import io.github.xezzon.geom.auth.domain.User;
 import io.github.xezzon.geom.auth.repository.UserRepository;
 import io.github.xezzon.tao.jpa.BaseJpaWrapper;
-import org.springframework.stereotype.Repository;
+import io.micronaut.data.annotation.Repository;
 
 /**
  * @author xezzon

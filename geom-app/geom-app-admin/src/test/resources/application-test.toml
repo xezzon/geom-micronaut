@@ -1,0 +1,13 @@
+[datasources.default]
+url = 'jdbc:tc:postgresql:14:///postgres'
+driver-class-name = 'org.testcontainers.jdbc.ContainerDatabaseDriver'
+
+[jpa]
+[jpa.default.properties.hibernate]
+show_sql = true
+format_sql = true
+cdi.extensions = true
+hbm2ddl.auto = 'create-drop'
+
+[geom.system]
+id-generator = 'snowflake'

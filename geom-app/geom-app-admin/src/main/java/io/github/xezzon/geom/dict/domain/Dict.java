@@ -9,7 +9,6 @@ import io.github.xezzon.tao.dict.IDict;
 import io.github.xezzon.tao.tree.TreeNode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -24,7 +23,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * @author xezzon
@@ -39,7 +37,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
     }
 )
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class Dict implements IDict, TreeNode<Dict, String> {
 
   static final String TAG = "tag";
@@ -49,7 +46,7 @@ public class Dict implements IDict, TreeNode<Dict, String> {
   @Column(name = "id", nullable = false, updatable = false, length = DatabaseConstant.ID_LENGTH)
   @GenericGenerator(
       name = HibernateIdGenerator.GENERATOR_NAME,
-      strategy = HibernateIdGenerator.GENERATOR_STRATEGY
+      type = HibernateIdGenerator.class
   )
   @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
   private String id;

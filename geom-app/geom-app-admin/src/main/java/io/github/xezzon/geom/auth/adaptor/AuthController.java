@@ -55,7 +55,7 @@ public class AuthController {
   @Get("/me")
   @SaCheckLogin
   public User getCurrentUser() {
-    return userService.getById(StpUtil.getLoginId(null));
+    return userService.getById(StpUtil.getLoginIdAsString());
   }
 
   /**

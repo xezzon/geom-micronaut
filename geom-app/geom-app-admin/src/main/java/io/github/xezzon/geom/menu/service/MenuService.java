@@ -16,10 +16,16 @@ public interface MenuService {
   List<Menu> menuTree(String parentId);
 
   /**
-   * 新增/修改菜单
+   * 新增菜单
    * @param menu 菜单
    */
-  void upsertMenu(Menu menu);
+  void addMenu(Menu menu);
+
+  /**
+   * 修改菜单
+   * @param menu 菜单
+   */
+  void modifyMenu(Menu menu);
 
   /**
    * 删除菜单主键

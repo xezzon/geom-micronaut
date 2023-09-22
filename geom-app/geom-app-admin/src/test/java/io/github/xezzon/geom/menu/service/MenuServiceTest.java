@@ -132,7 +132,7 @@ class MenuServiceTest {
     menu.setOrdinal(RandomUtil.randomInt());
     menu.setHideInMenu(RandomUtil.randomBoolean());
     menu.setParentId("0");
-    service.upsertMenu(menu);
+    service.addMenu(menu);
 
     Optional<Menu> optionalMenu = repository.findById(menu.getId());
     Assertions.assertTrue(optionalMenu.isPresent());
@@ -151,7 +151,7 @@ class MenuServiceTest {
     menu1.setHideInMenu(RandomUtil.randomBoolean());
     menu1.setParentId(menu.getParentId());
 
-    Assertions.assertThrows(ClientException.class, () -> service.upsertMenu(menu1));
+    Assertions.assertThrows(ClientException.class, () -> service.addMenu(menu1));
   }
 
   @Test

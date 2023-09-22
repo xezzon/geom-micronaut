@@ -50,7 +50,7 @@ public class MenuServiceImpl implements MenuService {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void upsertMenu(Menu menu) {
+  public void addMenu(Menu menu) {
     Optional<Menu> optionalMenu = menuDAO.get()
         .findByParentIdAndPath(menu.getParentId(), menu.getPath());
     if (optionalMenu.isPresent()) {
@@ -59,6 +59,18 @@ public class MenuServiceImpl implements MenuService {
       }
     }
     menuDAO.get().save(menu);
+  }
+
+  @Override
+  public void modifyMenu(Menu menu) {
+    Optional<Menu> optionalMenu = menuDAO.get()
+        .findByParentIdAndPath(menu.getParentId(), menu.getPath());
+    if (optionalMenu.isPresent()) {
+      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
+        throw new ClientException("已存在相同路径的同级菜单");
+      }
+    }
+    menuDAO.get().update(menu);
   }
 
   @Override

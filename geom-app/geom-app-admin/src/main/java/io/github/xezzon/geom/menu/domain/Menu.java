@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -78,7 +79,8 @@ public class Menu implements TreeNode<Menu, String> {
    * 上级菜单
    */
   @Transient
-  private Menu parent;
+  @Getter(AccessLevel.NONE)
+  private transient Menu parent;
   /**
    * 子级菜单
    */

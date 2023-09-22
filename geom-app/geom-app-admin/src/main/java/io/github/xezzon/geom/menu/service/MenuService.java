@@ -14,4 +14,10 @@ public interface MenuService {
    * @return 菜单（树形结构）
    */
   List<Menu> menuTree(String parentId);
+
+  /**
+   * 新增菜单
+   * @param menu 菜单
+   */
+  void addMenu(Menu menu);
 }

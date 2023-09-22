@@ -3,12 +3,14 @@ package io.github.xezzon.geom.menu.service;
 import cn.hutool.core.util.RandomUtil;
 import io.github.xezzon.geom.menu.domain.Menu;
 import io.github.xezzon.geom.menu.repository.MenuRepository;
+import io.github.xezzon.tao.exception.ClientException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -118,5 +120,37 @@ class MenuServiceTest {
             .flatMap(Collection::parallelStream)
             .toArray()
     );
+  }
+
+  @Test
+  void addMenu() {
+    Menu menu = new Menu();
+    menu.setPath(RandomUtil.randomString(6));
+    menu.setName(RandomUtil.randomString(6));
+    menu.setIcon(RandomUtil.randomString(6));
+    menu.setComponent(RandomUtil.randomString(6));
+    menu.setOrdinal(RandomUtil.randomInt());
+    menu.setHideInMenu(RandomUtil.randomBoolean());
+    menu.setParentId("0");
+    service.addMenu(menu);
+
+    Optional<Menu> optionalMenu = repository.findById(menu.getId());
+    Assertions.assertTrue(optionalMenu.isPresent());
+  }
+
+  @Test
+  void addMenu_repeat() {
+    final Menu menu = RandomUtil.randomEle(MENUS);
+
+    Menu menu1 = new Menu();
+    menu1.setPath(menu.getPath());
+    menu1.setName(RandomUtil.randomString(6));
+    menu1.setIcon(RandomUtil.randomString(6));
+    menu1.setComponent(RandomUtil.randomString(6));
+    menu1.setOrdinal(RandomUtil.randomInt());
+    menu1.setHideInMenu(RandomUtil.randomBoolean());
+    menu1.setParentId(menu.getParentId());
+
+    Assertions.assertThrows(ClientException.class, () -> service.addMenu(menu1));
   }
 }

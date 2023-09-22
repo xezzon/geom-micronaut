@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author xezzon
@@ -48,12 +50,26 @@ public class MenuServiceImpl implements MenuService {
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public void addMenu(Menu menu) {
+  public void upsertMenu(Menu menu) {
     Optional<Menu> optionalMenu = menuDAO.get()
         .findByParentIdAndPath(menu.getParentId(), menu.getPath());
     if (optionalMenu.isPresent()) {
-      throw new ClientException("已存在相同路径的同级菜单");
+      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
+        throw new ClientException("已存在相同路径的同级菜单");
+      }
     }
     menuDAO.get().save(menu);
+  }
+
+  @Override
+  public void removeMenu(String id) {
+    List<Menu> menus = Tree.topDown(
+        Collections.singleton(id), -1, menuDAO.get()::findByParentIdInOrderByOrdinalAsc
+    );
+    Set<String> menuIdSet = menus.parallelStream()
+        .map(Menu::getId)
+        .collect(Collectors.toSet());
+    menuIdSet.add(id);
+    menuDAO.get().deleteByIdIn(menuIdSet);
   }
 }

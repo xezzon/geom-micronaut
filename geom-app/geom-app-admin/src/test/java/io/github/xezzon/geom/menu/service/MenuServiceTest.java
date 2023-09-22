@@ -132,7 +132,7 @@ class MenuServiceTest {
     menu.setOrdinal(RandomUtil.randomInt());
     menu.setHideInMenu(RandomUtil.randomBoolean());
     menu.setParentId("0");
-    service.addMenu(menu);
+    service.upsertMenu(menu);
 
     Optional<Menu> optionalMenu = repository.findById(menu.getId());
     Assertions.assertTrue(optionalMenu.isPresent());
@@ -151,6 +151,25 @@ class MenuServiceTest {
     menu1.setHideInMenu(RandomUtil.randomBoolean());
     menu1.setParentId(menu.getParentId());
 
-    Assertions.assertThrows(ClientException.class, () -> service.addMenu(menu1));
+    Assertions.assertThrows(ClientException.class, () -> service.upsertMenu(menu1));
+  }
+
+  @Test
+  void removeMenu() {
+    List<Menu> menus = repository.findAll();
+
+    List<Menu> removed = new ArrayList<>();
+    Menu menu = RandomUtil.randomEle(MENUS);
+    service.removeMenu(menu.getId());
+    removed.add(menu);
+    List<Menu> children = menu.getChildren();
+    removed.addAll(children);
+    removed.addAll(children.parallelStream()
+        .map(Menu::getChildren)
+        .flatMap(Collection::parallelStream)
+        .toList()
+    );
+
+    Assertions.assertEquals(menus.size() - removed.size(), repository.findAll().size());
   }
 }

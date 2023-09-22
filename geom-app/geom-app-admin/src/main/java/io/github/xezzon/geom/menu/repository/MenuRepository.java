@@ -16,4 +16,6 @@ public interface MenuRepository extends JpaRepository<Menu, String> {
   List<Menu> findByParentIdInOrderByOrdinalAsc(Collection<String> parentIds);
 
   Optional<Menu> findByParentIdAndPath(String parentId, String path);
+
+  int deleteByIdIn(Collection<String> ids);
 }

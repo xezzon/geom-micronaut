@@ -2,8 +2,8 @@ package io.github.xezzon.geom.dict.adaptor;
 
 import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.dict.service.DictService;
+import io.github.xezzon.geom.domain.CommonQueryBean;
 import io.github.xezzon.tao.logger.LogRecord;
-import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.github.xezzon.tao.tree.TreeNode;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
@@ -14,6 +14,7 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.RequestBean;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class DictController {
    */
   @Get("/tag")
   @LogRecord
-  public Page<Dict> dictTagPage(CommonQuery params) {
-    return dictService.dictTagPage(params);
+  public Page<Dict> dictTagPage(@RequestBean CommonQueryBean params) {
+    return dictService.dictTagPage(params.to());
   }
 
   /**

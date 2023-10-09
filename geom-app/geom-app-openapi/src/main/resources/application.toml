@@ -3,7 +3,7 @@ environments = "${MICRONAUT_ENVIRONMENTS}"
 [micronaut.application]
 name = "geom-app-openapi"
 [micronaut.server]
-port = "@app.port"
+port = "@app.port@"
 
 [jackson]
 date-format = "yyyy-MM-dd HH:mm:ss"

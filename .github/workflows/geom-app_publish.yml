@@ -1,0 +1,46 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Publish Docker Image
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    if: startsWith(github.ref, 'refs/tags/geom-app-')
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get Tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "module=${TAG%/*}" >> "$GITHUB_ENV"
+          echo "version=${TAG#*/}" >> "$GITHUB_ENV"
+
+      - name: Set up Apache Maven Central
+        uses: actions/setup-java@v3
+        with: # running setup-java again overwrites the settings.xml
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+          server-id: ghcr.io # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: DOCKER_USERNAME # env variable for username in deploy
+          server-password: DOCKER_TOKEN # env variable for token in deploy
+
+      - name: Set Version
+        run: mvn versions:set -DnewVersion=$version -pl geom-app/$module
+
+      - name: Install dependency
+        run: mvn -DskipTests=true install -P report
+
+      - name: Publish to Apache Maven Central
+        run: mvn clean compile jib:build -pl geom-app/$module
+        env:
+          DOCKER_USERNAME: ${{ github.actor }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

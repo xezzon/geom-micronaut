@@ -20,7 +20,14 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 应用端口号 -->
     <app.port>8080</app.port>
+    <!-- JavaAgent 存放路径 -->
+    <agent-extraction-root>${project.build.directory}/java-agents</agent-extraction-root>
+    <!-- JavaAgent 在Docker中的路径 -->
+    <agent-path>/opt/agent</agent-path>
+    <!-- JavaAgent 名称 -->
+    <opentelemetry-javaagent.name>opentelemetry-javaagent.jar</opentelemetry-javaagent.name>
   </properties>
 
   <dependencies>
@@ -176,41 +183,86 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>com.google.cloud.tools</groupId>
-        <artifactId>jib-maven-plugin</artifactId>
-        <configuration>
-          <from>
-            <platforms>
-              <platform>
-                <architecture>amd64</architecture>
-                <os>linux</os>
-              </platform>
-              <platform>
-                <architecture>arm64</architecture>
-                <os>linux</os>
-              </platform>
-            </platforms>
-          </from>
-          <to>
-            <image>ghcr.io/xezzon/${project.artifactId}:${project.version}</image>
-          </to>
-          <container>
-            <ports>
-              <port>${app.port}</port>
-            </ports>
-            <format>Docker</format>
-          </container>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>deploy</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <configuration>
+              <from>
+                <platforms>
+                  <platform>
+                    <architecture>amd64</architecture>
+                    <os>linux</os>
+                  </platform>
+                  <platform>
+                    <architecture>arm64</architecture>
+                    <os>linux</os>
+                  </platform>
+                </platforms>
+              </from>
+              <to>
+                <image>ghcr.io/xezzon/${project.artifactId}:${project.version}</image>
+              </to>
+              <container>
+                <ports>
+                  <port>${app.port}</port>
+                </ports>
+                <jvmFlags>
+                  <jvmFlag>-javaagent:${agent-path}/${opentelemetry-javaagent.name}</jvmFlag>
+                </jvmFlags>
+                <environment>
+                  <OTEL_LOGS_EXPORTER>otlp</OTEL_LOGS_EXPORTER>
+                  <OTEL_SERVICE_NAME>${project.artifactId}</OTEL_SERVICE_NAME>
+                  <OTEL_SDK_DISABLED>true</OTEL_SDK_DISABLED>
+                </environment>
+                <format>Docker</format>
+              </container>
+              <extraDirectories>
+                <paths>
+                  <path>
+                    <from>${agent-extraction-root}</from>
+                    <into>${agent-path}</into>
+                  </path>
+                </paths>
+              </extraDirectories>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.googlecode.maven-download-plugin</groupId>
+            <artifactId>download-maven-plugin</artifactId>
+            <version>${download-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>wget</goal>
+                </goals>
+                <configuration>
+                  <url>https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar</url>
+                  <outputDirectory>${agent-extraction-root}</outputDirectory>
+                  <outputFileName>${opentelemetry-javaagent.name}</outputFileName>
+                  <readTimeOut>30000</readTimeOut>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

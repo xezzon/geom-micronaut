@@ -40,7 +40,7 @@ jobs:
         run: mvn -DskipTests=true install -P report
 
       - name: Publish to Apache Maven Central
-        run: mvn clean compile jib:build -pl geom-app/$module
+        run: mvn clean package jib:build -P docker -pl geom-app/$module
         env:
           DOCKER_USERNAME: ${{ github.actor }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

@@ -14,7 +14,7 @@
 
   <modules>
     <module>geom-core</module>
-    <module>geom-app</module>
+    <module>geom-service</module>
     <module>geom-sdk</module>
     <module>geom-common</module>
   </modules>

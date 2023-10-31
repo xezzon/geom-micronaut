@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/geom-app-')
+    if: startsWith(github.ref, 'refs/tags/geom-service-')
 
     runs-on: ubuntu-latest
 
@@ -34,13 +34,13 @@ jobs:
           server-password: DOCKER_TOKEN # env variable for token in deploy
 
       - name: Set Version
-        run: mvn versions:set -DnewVersion=$version -pl geom-app/$module
+        run: mvn versions:set -DnewVersion=$version -pl geom-service/$module
 
       - name: Install dependency
         run: mvn -DskipTests=true install -P report
 
       - name: Publish to Apache Maven Central
-        run: mvn clean package jib:build -P docker -pl geom-app/$module
+        run: mvn clean package jib:build -P docker -pl geom-service/$module
         env:
           DOCKER_USERNAME: ${{ github.actor }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}

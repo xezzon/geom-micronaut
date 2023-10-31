@@ -8,12 +8,12 @@
     <artifactId>geom</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>geom-app</artifactId>
+  <artifactId>geom-service</artifactId>
   <packaging>pom</packaging>
 
   <modules>
-    <module>geom-app-admin</module>
-    <module>geom-app-openapi</module>
+    <module>geom-service-admin</module>
+    <module>geom-service-openapi</module>
   </modules>
 
   <properties>

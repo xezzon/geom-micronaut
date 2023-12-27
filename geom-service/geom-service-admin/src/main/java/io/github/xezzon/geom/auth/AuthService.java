@@ -2,6 +2,9 @@ package io.github.xezzon.geom.auth;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import io.github.xezzon.geom.auth.constant.AuthConstants;
+import io.github.xezzon.geom.user.domain.UserDTOConverter;
+import io.github.xezzon.geom.user.UserDTO;
 import io.github.xezzon.geom.user.UserService;
 import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.user.service.IUserService4Auth;
@@ -33,9 +36,9 @@ public class AuthService {
     }
     /* 执行主流程 */
     StpUtil.login(user.getId());
-  }
-
-  public User getCurrentUser() {
-    return userService.getUserById(StpUtil.getLoginIdAsString());
+    /* 将用户信息写入Session */
+    UserDTO dto = UserDTOConverter.INSTANCE.convert(user);
+    StpUtil.getSession()
+        .set(AuthConstants.SUBJECT, dto);
   }
 }

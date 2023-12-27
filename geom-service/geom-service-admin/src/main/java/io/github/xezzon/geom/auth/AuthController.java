@@ -3,6 +3,8 @@ package io.github.xezzon.geom.auth;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import io.github.xezzon.geom.auth.constant.AuthConstants;
+import io.github.xezzon.geom.user.UserDTO;
 import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.micronaut.http.annotation.Body;
@@ -41,8 +43,9 @@ public class AuthController {
    */
   @Get("/me")
   @SaCheckLogin
-  public User getCurrentUser() {
-    return authService.getCurrentUser();
+  public UserDTO getCurrentUser() {
+    return StpUtil.getSession()
+        .getModel(AuthConstants.SUBJECT, UserDTO.class);
   }
 
   /**

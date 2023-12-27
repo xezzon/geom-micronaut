@@ -13,13 +13,4 @@ public interface IUserService4Auth {
    * @return 用户信息
    */
   User getUserByUsername(String username);
-
-  /**
-   * 获取用户信息
-   * @param userId 用户主键
-   * @return 用户信息
-   * @deprecated TODO:不做查询直接从Session中恢复会话
-   */
-  @Deprecated
-  User getUserById(String userId);
 }

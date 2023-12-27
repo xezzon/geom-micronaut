@@ -1,5 +1,6 @@
 package io.github.xezzon.geom.menu;
 
+import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.geom.menu.domain.Menu;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -34,13 +35,15 @@ public class MenuController {
   }
 
   @Post()
-  public void addMenu(@Body Menu menu) {
+  public Id addMenu(@Body Menu menu) {
     menuService.addMenu(menu);
+    return Id.of(menu.getId());
   }
 
   @Put()
-  public void modifyMenu(@Body Menu menu) {
+  public Id modifyMenu(@Body Menu menu) {
     menuService.modifyMenu(menu);
+    return Id.of(menu.getId());
   }
 
   @Delete("/{id}")

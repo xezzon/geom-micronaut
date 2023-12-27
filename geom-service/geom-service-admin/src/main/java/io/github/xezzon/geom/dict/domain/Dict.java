@@ -49,38 +49,38 @@ public class Dict implements IDict, TreeNode<Dict, String> {
       type = HibernateIdGenerator.class
   )
   @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
-  private String id;
+  String id;
   /**
    * 字典目
    */
   @Column(name = TAG, nullable = false, updatable = false)
   @NotNull(message = "字典目不能为空")
-  private String tag;
+  String tag;
   /**
    * 字典值
    */
   @NotNull(message = "字典编码不能为空")
   @Pattern(regexp = "[\\w-]+", message = "字典编码只允许英文字母、下划线、短横线")
   @Column(name = CODE, nullable = false, updatable = false)
-  private String code;
+  String code;
   /**
    * 字典描述
    */
   @Column(name = "label")
-  private String label;
+  String label;
   /**
    * 排序号
    */
   @Column(name = "ordinal", nullable = false)
-  private Integer ordinal;
+  Integer ordinal;
   /**
    * 上级字典ID
    */
   @Column(name = "parent_id", nullable = false, updatable = false)
-  private String parentId;
+  String parentId;
 
   @Transient
-  private List<Dict> children;
+  List<Dict> children;
 
   @Override
   public int getOrdinal() {

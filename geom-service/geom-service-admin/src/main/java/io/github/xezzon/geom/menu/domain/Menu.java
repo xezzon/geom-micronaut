@@ -38,54 +38,54 @@ public class Menu implements TreeNode<Menu, String> {
       type = HibernateIdGenerator.class
   )
   @GeneratedValue(generator = HibernateIdGenerator.GENERATOR_NAME)
-  private String id;
+  String id;
   /**
    * 菜单路径
    */
   @Column(nullable = false)
-  private String path;
+  String path;
   /**
    * 菜单的名字
    */
   @Column(nullable = false)
-  private String name;
+  String name;
   /**
    * 组件路径
    */
   @Column()
-  private String component;
+  String component;
   /**
    * 图标标识
    * @see <a href="https://iconify.design/">Iconify</a>
    */
   @Column()
-  private String icon;
+  String icon;
   /**
    * 排序
    */
   @Column(nullable = false)
-  private Integer ordinal;
+  Integer ordinal;
   /**
    * 是否隐藏
    */
   @Column(nullable = false)
-  private Boolean hideInMenu;
+  Boolean hideInMenu;
   /**
    * 上级菜单主键
    */
   @Column(nullable = false)
-  private String parentId;
+  String parentId;
   /**
    * 上级菜单
    */
   @Transient
   @Getter(AccessLevel.NONE)
-  private transient Menu parent;
+  Menu parent;
   /**
    * 子级菜单
    */
   @Transient
-  private List<Menu> children;
+  List<Menu> children;
 
   /**
    * 计算全路径

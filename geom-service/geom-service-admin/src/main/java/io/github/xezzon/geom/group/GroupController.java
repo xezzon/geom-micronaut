@@ -5,6 +5,7 @@ import cn.hutool.core.util.HexUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.geom.group.domain.Group;
 import io.github.xezzon.geom.group.domain.GroupMemberUser;
 import io.github.xezzon.geom.group.domain.AddGroupQuery;
@@ -48,10 +49,11 @@ public class GroupController {
    * @param query 新增用户组请求体
    */
   @Post()
-  public void addGroup(@Body AddGroupQuery query) {
+  public Id addGroup(@Body AddGroupQuery query) {
     Group group = query.to();
     group.setOwnerId(StpUtil.getLoginId(null));
     groupService.addGroup(group);
+    return Id.of(group.getId());
   }
 
   /**

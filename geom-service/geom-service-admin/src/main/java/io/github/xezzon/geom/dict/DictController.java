@@ -2,6 +2,7 @@ package io.github.xezzon.geom.dict;
 
 import io.github.xezzon.geom.dict.domain.Dict;
 import io.github.xezzon.geom.domain.CommonQueryBean;
+import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.github.xezzon.tao.tree.TreeNode;
 import io.micronaut.data.model.Page;
@@ -44,8 +45,9 @@ public class DictController {
    */
   @Post()
   @LogRecord
-  public void addDict(@Body @Valid Dict dict) {
+  public Id addDict(@Body @Valid Dict dict) {
     dictService.addDict(dict);
+    return Id.of(dict.getId());
   }
 
   /**
@@ -75,7 +77,8 @@ public class DictController {
   }
 
   @Put()
-  public void modifyDict(@Body @Valid Dict dict) {
+  public Id modifyDict(@Body @Valid Dict dict) {
     dictService.modifyDict(dict);
+    return Id.of(dict.getId());
   }
 }

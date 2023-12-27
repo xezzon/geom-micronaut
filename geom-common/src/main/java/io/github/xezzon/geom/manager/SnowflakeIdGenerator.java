@@ -16,10 +16,6 @@ import jakarta.inject.Singleton;
 )
 public class SnowflakeIdGenerator implements IdGenerator {
 
-  public SnowflakeIdGenerator() {
-    super();
-  }
-
   @Override
   public String nextId() {
     return IdUtil.getSnowflakeNextIdStr();

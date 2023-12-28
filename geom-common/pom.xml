@@ -86,7 +86,7 @@
                 </exclusion>
               </exclusions>
               <groupId>io.micronaut.data</groupId>
-              <version>${micronaut.version}</version>
+              <version>${micronaut.data.version}</version>
             </path>
             <path>
               <artifactId>micronaut-serde-processor</artifactId>

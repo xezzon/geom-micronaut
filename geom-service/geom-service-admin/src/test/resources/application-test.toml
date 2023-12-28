@@ -9,5 +9,5 @@ format_sql = true
 cdi.extensions = true
 hbm2ddl.auto = 'create-drop'
 
-[geom.system]
+[geom]
 id-generator = 'snowflake'

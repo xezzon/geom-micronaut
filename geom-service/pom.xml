@@ -26,6 +26,8 @@
     <agent-extraction-root>${project.build.directory}/java-agents</agent-extraction-root>
     <!-- JavaAgent 在Docker中的路径 -->
     <agent-path>/opt/agent</agent-path>
+    <workdir>/app</workdir>
+    <docker.host>ghcr.io/xezzon</docker.host>
     <!-- JavaAgent 名称 -->
     <opentelemetry-javaagent.name>opentelemetry-javaagent.jar</opentelemetry-javaagent.name>
   </properties>
@@ -213,20 +215,26 @@
                 </platforms>
               </from>
               <to>
-                <image>ghcr.io/xezzon/${project.artifactId}:${project.version}</image>
+                <image>${docker.host}/${project.artifactId}:${project.version}</image>
               </to>
               <container>
-                <ports>
-                  <port>${app.port}</port>
-                </ports>
-                <jvmFlags>
-                  <jvmFlag>-javaagent:${agent-path}/${opentelemetry-javaagent.name}</jvmFlag>
-                </jvmFlags>
                 <environment>
                   <OTEL_LOGS_EXPORTER>otlp</OTEL_LOGS_EXPORTER>
                   <OTEL_SERVICE_NAME>${project.artifactId}</OTEL_SERVICE_NAME>
                   <OTEL_SDK_DISABLED>true</OTEL_SDK_DISABLED>
                 </environment>
+                <ports>
+                  <port>${app.port}</port>
+                </ports>
+                <volumes>
+                  <volume>${workdir}/resources</volume>
+                  <volume>${agent-path}</volume>
+                </volumes>
+                <jvmFlags>
+                  <jvmFlag>-javaagent:${agent-path}/${opentelemetry-javaagent.name}</jvmFlag>
+                </jvmFlags>
+                <appRoot>${workdir}</appRoot>
+                <workingDirectory>${workdir}</workingDirectory>
                 <format>Docker</format>
               </container>
               <extraDirectories>

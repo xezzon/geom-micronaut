@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.github.xezzon</groupId>
     <artifactId>xezzon-parent</artifactId>
-    <version>2.1</version>
+    <version>2.5</version>
   </parent>
   <artifactId>geom</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -24,47 +24,20 @@
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!--依赖版本-->
-    <sa-token.version>1.35.0.RC</sa-token.version>
-    <forest.version>1.5.30</forest.version>
     <bouncy-castle.version>1.74</bouncy-castle.version>
+    <forest.version>1.5.30</forest.version>
     <lombok.version>1.18.28</lombok.version>
+    <sa-token.version>1.35.0.RC</sa-token.version>
     <!-- 插件版本 -->
+    <download-maven-plugin.version>1.6.8</download-maven-plugin.version>
+    <micronaut.data.version>4.3.1</micronaut.data.version>
+    <micronaut.openapi.version>5.1.1</micronaut.openapi.version>
     <micronaut.serde.version>2.2.0</micronaut.serde.version>
     <micronaut.validation.version>4.0.1</micronaut.validation.version>
-    <micronaut.openapi.version>5.1.1</micronaut.openapi.version>
-    <download-maven-plugin.version>1.6.8</download-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>io.micronaut.platform</groupId>
-        <artifactId>micronaut-platform</artifactId>
-        <version>${micronaut.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>cn.hutool</groupId>
-        <artifactId>hutool-bom</artifactId>
-        <version>${hutool.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-bom</artifactId>
-        <version>2.20.0</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>cn.dev33</groupId>
-        <artifactId>sa-token-bom</artifactId>
-        <version>${sa-token.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
       <dependency>
         <groupId>com.dtflys.forest</groupId>
         <artifactId>forest-core</artifactId>
@@ -80,6 +53,13 @@
         <groupId>io.github.xezzon</groupId>
         <artifactId>micronaut-tao</artifactId>
         <version>0.13.0</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-bom</artifactId>
+        <version>${sa-token.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

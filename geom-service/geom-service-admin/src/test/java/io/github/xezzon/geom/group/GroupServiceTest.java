@@ -94,11 +94,9 @@ class GroupServiceTest {
   @Test
   void addGroup() {
     Group group = new Group();
-    String flakeId = IdUtil.getSnowflakeNextIdStr();
     String code = RandomUtil.randomString(6);
     String name = RandomUtil.randomString(6);
     String ownerId = IdUtil.getSnowflakeNextIdStr();
-    group.setId(flakeId);
     group.setCode(code);
     group.setName(name);
     group.setOwnerId(ownerId);

@@ -19,3 +19,7 @@ cdi.extensions = true
 [geom]
 [geom.system]
 id-generator = "${ID_GENERATOR:snowflake}"
+
+[sa-token]
+token-name = "X-SESSION-ID"
+token-style = "tik"

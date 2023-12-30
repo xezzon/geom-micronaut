@@ -3,9 +3,10 @@ package io.github.xezzon.geom.auth;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import io.github.xezzon.geom.user.domain.User;
+import io.github.xezzon.geom.user.UserDTO;
 import io.github.xezzon.tao.logger.LogRecord;
-import io.micronaut.http.annotation.Body;
+import io.micronaut.http.BasicAuth;
+import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -30,8 +31,8 @@ public class AuthController {
    */
   @Post("/login")
   @LogRecord
-  public SaTokenInfo login(@Body User user) {
-    authService.login(user.getUsername(), user.getPlaintext());
+  public SaTokenInfo login(BasicAuth basicAuth) {
+    authService.login(basicAuth.getUsername(), basicAuth.getPassword());
     return StpUtil.getTokenInfo();
   }
 
@@ -41,8 +42,23 @@ public class AuthController {
    */
   @Get("/me")
   @SaCheckLogin
-  public User getCurrentUser() {
+  public UserDTO getCurrentUser() {
     return authService.getCurrentUser();
+  }
+
+  /**
+   * 验证登录状态
+   * 若未登录则返回401状态
+   * 若已登录则返回JWT
+   * @return JWT
+   */
+  @Get("/validate")
+  public SaTokenInfo validate() {
+    String tokenValue = authService.signJwt();
+    SaTokenInfo tokenInfo = new SaTokenInfo();
+    tokenInfo.setTokenName(HttpHeaders.AUTHORIZATION);
+    tokenInfo.setTokenValue(tokenValue);
+    return tokenInfo;
   }
 
   /**

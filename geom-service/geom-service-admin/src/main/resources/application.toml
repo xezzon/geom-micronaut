@@ -17,8 +17,9 @@ format_sql = true
 cdi.extensions = true
 
 [geom]
-[geom.system]
-id-generator = "${ID_GENERATOR:snowflake}"
+id-generator = "${GEOM_ID_GENERATOR:snowflake}"
+[geom.jwt]
+issuer = "${GEOM_JWT_ISSUER:xezzon.github.io}"
 
 [sa-token]
 token-name = "X-SESSION-ID"

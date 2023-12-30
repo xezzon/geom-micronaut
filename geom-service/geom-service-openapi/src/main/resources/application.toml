@@ -17,5 +17,4 @@ format_sql = true
 cdi.extensions = true
 
 [geom]
-[geom.system]
-id-generator = "${ID_GENERATOR:snowflake}"
+id-generator = "${GEOM_ID_GENERATOR:snowflake}"

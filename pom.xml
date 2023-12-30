@@ -29,7 +29,7 @@
     <lombok.version>1.18.28</lombok.version>
     <sa-token.version>1.35.0.RC</sa-token.version>
     <!-- 插件版本 -->
-    <download-maven-plugin.version>1.6.8</download-maven-plugin.version>
+    <download-maven-plugin.version>1.8.0</download-maven-plugin.version>
     <micronaut.data.version>4.3.1</micronaut.data.version>
     <micronaut.openapi.version>5.1.1</micronaut.openapi.version>
     <micronaut.serde.version>2.2.0</micronaut.serde.version>

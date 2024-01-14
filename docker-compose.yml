@@ -1,0 +1,29 @@
+version: '3'
+services:
+  geom-service-admin:
+    image: ghcr.io/xezzon/geom-service-admin
+    container_name: geom-service-admin
+    environment:
+      - GEOM_JWT_ISSUER=xezzon.github.io
+      - OTEL_SDK_DISABLED=false  # 启用 OpenTelemetry
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4317
+    restart: unless-stopped
+  geom-service-openapi:
+    image: ghcr.io/xezzon/geom-service-openapi
+    container_name: geom-service-openapi
+    environment:
+      - GEOM_JWT_ISSUER=xezzon.github.io
+      - OTEL_SDK_DISABLED=false
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel:4317
+    restart: unless-stopped
+  myapp:  # 开发者自己的业务代码 打包为 Docker 镜像
+    image: myapp
+    container_name: myapp
+
+networks:
+  default:
+    driver: bridge
+  gateway_default:  # 与网关处于同一网络下
+    external: true
+  telemetry_collector:  # 与 OpenTelemetry Collector 处于同一网络下，可以通过其容器名作为域名进行访问
+    external: true

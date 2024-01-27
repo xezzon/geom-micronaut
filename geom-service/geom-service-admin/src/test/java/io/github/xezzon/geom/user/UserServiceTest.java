@@ -8,7 +8,8 @@ import io.github.xezzon.geom.user.repository.UserRepository;
 import io.github.xezzon.tao.exception.BaseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class UserServiceTest {
         .setUsername(RandomUtil.randomString(6))
         .setNickname(RandomUtil.randomString(6))
         .setPlaintext(RandomUtil.randomString(6))
-        .setCreateTime(LocalDateTime.now().minusMonths(1));
+        .setCreateTime(Instant.now().minus(30, ChronoUnit.DAYS));
     User register = userService.addUser(user);
     /* 测试返回值 */
     Assertions.assertNotNull(register.getId());

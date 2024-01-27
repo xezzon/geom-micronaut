@@ -30,6 +30,6 @@ public class GlobalExceptionHandler extends BaseExceptionHandler {
   public Result<Void> handleRuntimeException(RuntimeException e) {
     log.error("预期外异常", e);
     ServerException se = new ServerException(e.getMessage(), e);
-    return Result.fail(se.getCode(), errorMessage);
+    return Result.fail(se, errorMessage);
   }
 }

@@ -1,8 +1,8 @@
 package io.github.xezzon.geom.domain;
 
-import io.github.xezzon.geom.trait.IConverter;
-import io.github.xezzon.geom.trait.IQuery;
 import io.github.xezzon.tao.retrieval.CommonQuery;
+import io.github.xezzon.tao.rs.From;
+import io.github.xezzon.tao.rs.Into;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.annotation.QueryValue;
@@ -22,7 +22,7 @@ import org.mapstruct.factory.Mappers;
 @Setter
 @ToString
 @Introspected
-public class CommonQueryBean implements IQuery<CommonQuery> {
+public class CommonQueryBean implements Into<CommonQuery> {
 
   @QueryValue
   protected Set<String> select = null;
@@ -40,16 +40,16 @@ public class CommonQueryBean implements IQuery<CommonQuery> {
   protected int pageSize = 0;
 
   @Override
-  public CommonQuery to() {
-    return CommonQueryBeanConverter.INSTANCE.convert(this);
+  public CommonQuery into() {
+    return CommonQueryBeanConverter.INSTANCE.from(this);
   }
 }
 
 @Mapper
-interface CommonQueryBeanConverter extends IConverter<CommonQueryBean, CommonQuery> {
+interface CommonQueryBeanConverter extends From<CommonQueryBean, CommonQuery> {
 
   CommonQueryBeanConverter INSTANCE = Mappers.getMapper(CommonQueryBeanConverter.class);
 
   @Override
-  CommonQuery convert(CommonQueryBean source);
+  CommonQuery from(CommonQueryBean source);
 }

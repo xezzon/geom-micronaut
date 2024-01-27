@@ -12,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -75,14 +75,14 @@ public class User {
    */
   @DateCreated
   @Column(name = "create_time", nullable = false, updatable = false)
-  LocalDateTime createTime;
+  Instant createTime;
 
   /**
    * 最后更新时间
    */
   @DateUpdated
   @Column(name = "update_time", nullable = false)
-  LocalDateTime updateTime;
+  Instant updateTime;
 
   public User setPlaintext(String plaintext) {
     this.plaintext = plaintext;

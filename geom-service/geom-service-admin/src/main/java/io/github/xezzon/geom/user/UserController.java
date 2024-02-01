@@ -20,6 +20,6 @@ public class UserController {
 
   @Post()
   public User register(@Body RegisterQuery user) {
-    return userService.addUser(user.to());
+    return userService.addUser(user.into());
   }
 }

@@ -36,7 +36,7 @@ public class DictController {
   @Get("/tag")
   @LogRecord
   public Page<Dict> dictTagPage(@RequestBean CommonQueryBean params) {
-    return dictService.dictTagPage(params.to());
+    return dictService.dictTagPage(params.into());
   }
 
   /**

@@ -20,6 +20,6 @@ public class GeomAdminExceptionHandler {
   @Status(HttpStatus.UNAUTHORIZED)
   public Result<Void> handleNotLoginException(NotLoginException e) {
     UnauthorizedException ue = new UnauthorizedException(e);
-    return Result.fail(ue.getCode(), ue.getMessage());
+    return Result.fail(ue);
   }
 }

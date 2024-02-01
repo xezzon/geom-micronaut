@@ -51,7 +51,7 @@ public class AuthService {
     /* 执行主流程 */
     StpUtil.login(user.getId());
     /* 将用户信息写入Session */
-    UserDTO dto = UserDTOConverter.INSTANCE.convert(user);
+    UserDTO dto = UserDTOConverter.INSTANCE.from(user);
     StpUtil.getSession()
         .set(AuthConstants.SUBJECT, dto);
   }

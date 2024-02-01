@@ -2,8 +2,8 @@ package io.github.xezzon.geom.user.domain;
 
 import static io.github.xezzon.geom.constant.PatternConstants.PASSWORD_PATTERN;
 
-import io.github.xezzon.geom.trait.IConverter;
-import io.github.xezzon.geom.trait.IQuery;
+import io.github.xezzon.tao.trait.From;
+import io.github.xezzon.tao.trait.Into;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import org.mapstruct.factory.Mappers;
 @Setter
 @ToString
 @Introspected
-public class RegisterQuery implements IQuery<User> {
+public class RegisterQuery implements Into<User> {
 
   /**
    * 用户名
@@ -43,21 +43,22 @@ public class RegisterQuery implements IQuery<User> {
    */
   private String nickname;
 
-  public User to() {
-    return RegisterQueryConverter.INSTANCE.convert(this);
-  }
-}
-
-@Mapper
-interface RegisterQueryConverter extends IConverter<RegisterQuery, User> {
-
-  RegisterQueryConverter INSTANCE = Mappers.getMapper(RegisterQueryConverter.class);
-
   @Override
-  @Mapping(target = "id", ignore = true)
-  @Mapping(target = "cipher", ignore = true)
-  @Mapping(target = "plaintext", source = "cipher")
-  @Mapping(target = "createTime", ignore = true)
-  @Mapping(target = "updateTime", ignore = true)
-  User convert(RegisterQuery source);
+  public User into() {
+    return Converter.INSTANCE.from(this);
+  }
+
+  @Mapper
+  interface Converter extends From<RegisterQuery, User> {
+
+    Converter INSTANCE = Mappers.getMapper(Converter.class);
+
+    @Override
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "cipher", ignore = true)
+    @Mapping(target = "plaintext", source = "cipher")
+    @Mapping(target = "createTime", ignore = true)
+    @Mapping(target = "updateTime", ignore = true)
+    User from(RegisterQuery source);
+  }
 }

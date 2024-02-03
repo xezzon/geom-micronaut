@@ -11,4 +11,5 @@ import io.micronaut.data.jpa.repository.JpaRepository;
 public interface OpenapiRepository
     extends JpaRepository<Openapi, String> {
 
+  Openapi findByCode(String code);
 }

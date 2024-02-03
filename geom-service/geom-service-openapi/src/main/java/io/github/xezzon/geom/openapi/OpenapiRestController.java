@@ -5,6 +5,7 @@ import io.github.xezzon.geom.domain.CommonQueryBean;
 import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.geom.openapi.model.AddOpenapiQuery;
 import io.github.xezzon.geom.openapi.model.ModifyOpenapiQuery;
+import io.github.xezzon.geom.openapi.model.PublishOpenapiQuery;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -48,7 +49,7 @@ public class OpenapiRestController {
   /**
    * 修改对外接口
    */
-  @Put
+  @Put()
   public Id modifyOpenapi(@Body ModifyOpenapiQuery query) {
     Openapi openapi = query.into();
     openapiService.modifyOpenapi(openapi);
@@ -61,5 +62,10 @@ public class OpenapiRestController {
   @Delete("{id}")
   public void removeOpenapi(@PathVariable String id) {
     openapiService.removeOpenapi(id);
+  }
+
+  @Put("/publish")
+  public void publishOpenapi(@Body PublishOpenapiQuery query) {
+    openapiService.modifyOpenapi(query.into());
   }
 }

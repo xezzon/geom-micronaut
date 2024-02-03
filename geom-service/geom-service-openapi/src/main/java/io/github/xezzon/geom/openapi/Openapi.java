@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serial;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -52,4 +53,21 @@ public class Openapi extends BaseEntity<String> {
    */
   @Column()
   private String path;
+
+  /**
+   * 发布时间
+   */
+  @Column()
+  private Instant publishTime;
+
+  /**
+   * 当前时间大于等于发布时间则为已发布
+   * @return 接口是否已发布
+   */
+  public boolean isPublished() {
+    if (this.publishTime == null) {
+      return false;
+    }
+    return !Instant.now().isBefore(this.publishTime);
+  }
 }

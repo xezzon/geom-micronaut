@@ -41,19 +41,18 @@ public class Openapi extends BaseEntity<String> {
   /**
    * 接口名称
    */
-  @Column()
+  @Column(nullable = false)
   private String name;
   /**
    * 调用路径
    */
-  @Column()
+  @Column(nullable = false)
   private String code;
   /**
    * 转发路径
    */
-  @Column()
+  @Column(nullable = false)
   private String path;
-
   /**
    * 发布时间
    */

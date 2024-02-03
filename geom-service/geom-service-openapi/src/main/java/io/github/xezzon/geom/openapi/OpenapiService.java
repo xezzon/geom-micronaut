@@ -32,6 +32,14 @@ public class OpenapiService {
     return openapiDAO.query(commonQuery);
   }
 
+  protected void modifyOpenapi(Openapi openapi) {
+    /* 前置校验 */
+    // 重复性校验
+    checkRepeat(openapi);
+    /* 持久化 */
+    openapiDAO.get().update(openapi);
+  }
+
   /**
    * 查询是否有重复的内容
    * @param openapi 请求参数

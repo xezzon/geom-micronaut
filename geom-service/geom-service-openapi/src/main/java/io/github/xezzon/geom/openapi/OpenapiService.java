@@ -40,6 +40,11 @@ public class OpenapiService {
     openapiDAO.get().update(openapi);
   }
 
+  protected void removeOpenapi(String id) {
+    /* 持久化 */
+    openapiDAO.get().deleteById(id);
+  }
+
   /**
    * 查询是否有重复的内容
    * @param openapi 请求参数

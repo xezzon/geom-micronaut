@@ -8,7 +8,9 @@ import io.github.xezzon.geom.openapi.model.ModifyOpenapiQuery;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.RequestBean;
@@ -51,5 +53,13 @@ public class OpenapiRestController {
     Openapi openapi = query.into();
     openapiService.modifyOpenapi(openapi);
     return Id.of(openapi.getId());
+  }
+
+  /**
+   * 删除对外接口
+   */
+  @Delete("{id}")
+  public void removeOpenapi(@PathVariable String id) {
+    openapiService.removeOpenapi(id);
   }
 }

@@ -1,6 +1,8 @@
 package io.github.xezzon.geom.openapi;
 
 import io.github.xezzon.tao.exception.ClientException;
+import io.github.xezzon.tao.retrieval.CommonQuery;
+import io.micronaut.data.model.Page;
 import jakarta.inject.Singleton;
 import java.util.Objects;
 
@@ -24,6 +26,10 @@ public class OpenapiService {
     checkRepeat(openapi);
     /* 持久化 */
     openapiDAO.get().save(openapi);
+  }
+
+  protected Page<Openapi> queryOpenapiPage(CommonQuery commonQuery) {
+    return openapiDAO.query(commonQuery);
   }
 
   /**

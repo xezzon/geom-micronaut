@@ -1,10 +1,14 @@
 package io.github.xezzon.geom.openapi;
 
+import io.github.xezzon.geom.domain.CommonQueryBean;
 import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.geom.openapi.model.AddOpenapiQuery;
+import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.RequestBean;
 
 /**
  * @author xezzon
@@ -26,5 +30,13 @@ public class OpenapiRestController {
     Openapi openapi = query.into();
     openapiService.addOpenapi(openapi);
     return Id.of(openapi.getId());
+  }
+
+  /**
+   * 查询对外接口（分页）
+   */
+  @Get()
+  public Page<Openapi> queryOpenapiPage(@RequestBean CommonQueryBean params) {
+    return openapiService.queryOpenapiPage(params.into());
   }
 }

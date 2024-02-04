@@ -38,22 +38,29 @@ public class OpenapiService {
   protected void modifyOpenapi(Openapi openapi) {
     /* 前置校验 */
     // 重复性校验
-    Openapi exist = checkRepeat(openapi);
+    checkRepeat(openapi);
+    // 数据不存在
+    Optional<Openapi> exist = openapiDAO.get().findById(openapi.getId());
+    if (exist.isEmpty()) {
+      throw new NonexistentDataException();
+    }
     // 只允许更新未发布的接口
-    if (exist.isPublished()) {
+    if (exist.get().isPublished()) {
       throw new OpenapiPublishedException("不允许修改已发布的接口");
     }
     /* 持久化 */
-    openapiDAO.get().update(openapi);
+    openapiDAO.update(openapi);
   }
 
   protected void removeOpenapi(String id) {
     /* 前置校验 */
     // 只允许删除未发布的接口
     Optional<Openapi> exist = openapiDAO.get().findById(id);
+    // 数据不存在
     if (exist.isEmpty()) {
       throw new NonexistentDataException();
     }
+    // 只允许删除未发布的接口
     if (exist.get().isPublished()) {
       throw new OpenapiPublishedException("不允许删除已发布的接口");
     }
@@ -65,11 +72,13 @@ public class OpenapiService {
    * 查询是否有重复的内容
    * @param openapi 请求参数
    */
-  private Openapi checkRepeat(Openapi openapi) {
-    Openapi exist = openapiDAO.get().findByCode(openapi.getCode());
-    if (exist != null && !Objects.equals(exist.getId(), openapi.getId())) {
+  private void checkRepeat(Openapi openapi) {
+    if (openapi.getCode() == null) {
+      return;
+    }
+    Optional<Openapi> exist = openapiDAO.get().findByCode(openapi.getCode());
+    if (exist.isPresent() && !Objects.equals(exist.get().getId(), openapi.getId())) {
       throw new RepeatDataException("接口`" + openapi.getCode() + "`已存在");
     }
-    return exist;
   }
 }

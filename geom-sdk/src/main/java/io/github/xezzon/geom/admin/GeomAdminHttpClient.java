@@ -2,11 +2,10 @@ package io.github.xezzon.geom.admin;
 
 import feign.Feign;
 import feign.Headers;
+import feign.Logger.Level;
 import feign.Param;
 import feign.RequestLine;
 import feign.Target;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import io.github.xezzon.geom.config.CommonInterceptor;
 import java.time.Instant;
@@ -20,8 +19,7 @@ public interface GeomAdminHttpClient {
     return Feign.builder()
         .requestInterceptor(new CommonInterceptor())
         .client(new OkHttpClient())
-        .encoder(new JacksonEncoder())
-        .decoder(new JacksonDecoder())
+        .logLevel(Level.BASIC)
         .target(target);
   }
 

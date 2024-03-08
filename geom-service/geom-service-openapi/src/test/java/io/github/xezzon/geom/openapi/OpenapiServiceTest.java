@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-@MicronautTest
+@MicronautTest(transactional = false)
 @TestInstance(Lifecycle.PER_CLASS)
 class OpenapiServiceTest {
 
@@ -100,12 +100,16 @@ class OpenapiServiceTest {
     query.setName(RandomUtil.randomString(6));
     query.setCode(RandomUtil.randomString(6));
     query.setPath(RandomUtil.randomString(6));
-    service.modifyOpenapi(query.into());
+    Openapi openapi = query.into();
+    service.modifyOpenapi(openapi);
     Optional<Openapi> after = repository.findById(query.getId());
     Assertions.assertTrue(after.isPresent());
     Assertions.assertEquals(query.getName(), after.get().getName());
     Assertions.assertEquals(query.getCode(), after.get().getCode());
     Assertions.assertEquals(query.getPath(), after.get().getPath());
+    before.setName(query.getName());
+    before.setCode(query.getCode());
+    before.setPath(query.getPath());
   }
 
   @Test
@@ -118,12 +122,16 @@ class OpenapiServiceTest {
     query.setName(RandomUtil.randomString(6));
     query.setCode(before.getCode());
     query.setPath(RandomUtil.randomString(6));
-    service.modifyOpenapi(query.into());
+    Openapi openapi = query.into();
+    service.modifyOpenapi(openapi);
     Optional<Openapi> after = repository.findById(query.getId());
     Assertions.assertTrue(after.isPresent());
     Assertions.assertEquals(query.getName(), after.get().getName());
     Assertions.assertEquals(query.getCode(), after.get().getCode());
     Assertions.assertEquals(query.getPath(), after.get().getPath());
+    before.setName(query.getName());
+    before.setCode(query.getCode());
+    before.setPath(query.getPath());
   }
 
   @Test
@@ -162,15 +170,14 @@ class OpenapiServiceTest {
 
   @Test
   void removeOpenapi() {
-    String id = OPENAPI_LIST.parallelStream()
+    Openapi openapi = OPENAPI_LIST.parallelStream()
         .filter(o -> !o.isPublished())
-        .map(Openapi::getId)
         .findAny().get();
     List<Openapi> before = repository.findAll();
-    service.removeOpenapi(id);
+    service.removeOpenapi(openapi.getId());
     List<Openapi> after = repository.findAll();
     Assertions.assertEquals(before.size() - 1, after.size());
-    Optional<Openapi> exist = repository.findById(id);
+    Optional<Openapi> exist = repository.findById(openapi.getId());
     Assertions.assertTrue(exist.isEmpty());
   }
 
@@ -193,10 +200,12 @@ class OpenapiServiceTest {
     PublishOpenapiQuery query = new PublishOpenapiQuery();
     query.setId(before.getId());
     query.setPublishTime(Instant.now());
-    service.modifyOpenapi(query.into());
+    Openapi openapi = query.into();
+    service.modifyOpenapi(openapi);
     Optional<Openapi> after = repository.findById(query.getId());
     Assertions.assertTrue(after.isPresent());
     Assertions.assertTrue(after.get().isPublished());
+    before.setPublishTime(query.getPublishTime());
   }
 
   @Test

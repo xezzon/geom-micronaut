@@ -25,6 +25,8 @@ public class PublishOpenapiQuery implements Into<Openapi> {
 
     Converter INSTANCE = Mappers.getMapper(Converter.class);
 
+    @Mapping(target = "path", ignore = true)
+    @Mapping(target = "code", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "createTime", ignore = true)
     @Mapping(target = "updateTime", ignore = true)

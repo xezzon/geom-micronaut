@@ -27,7 +27,7 @@ public class AuthController {
 
   /**
    * 用户登录
-   * @param user 用户名 密码
+   * @param basicAuth 用户名 密码
    */
   @Post("/login")
   @LogRecord

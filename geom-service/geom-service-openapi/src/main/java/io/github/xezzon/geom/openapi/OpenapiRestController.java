@@ -59,7 +59,7 @@ public class OpenapiRestController {
   /**
    * 删除对外接口
    */
-  @Delete("{id}")
+  @Delete("/{id}")
   public void removeOpenapi(@PathVariable String id) {
     openapiService.removeOpenapi(id);
   }
@@ -67,5 +67,13 @@ public class OpenapiRestController {
   @Put("/publish")
   public void publishOpenapi(@Body PublishOpenapiQuery query) {
     openapiService.modifyOpenapi(query.into());
+  }
+
+  @Post("/{apiId}/instance/{ownerId}")
+  public void subscribeOpenapi(@PathVariable String apiId, @PathVariable String ownerId) {
+    OpenapiInstance openapiInstance = new OpenapiInstance();
+    openapiInstance.setApiId(apiId);
+    openapiInstance.setOwnerId(ownerId);
+    openapiService.subscribeOpenapi(openapiInstance);
   }
 }

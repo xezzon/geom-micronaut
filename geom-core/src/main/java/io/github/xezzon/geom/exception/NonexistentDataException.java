@@ -17,4 +17,8 @@ public class NonexistentDataException extends ClientException {
   public NonexistentDataException() {
     super(ERROR_CODE, ERROR_MESSAGE);
   }
+
+  public NonexistentDataException(String message) {
+    super(ERROR_CODE, message);
+  }
 }

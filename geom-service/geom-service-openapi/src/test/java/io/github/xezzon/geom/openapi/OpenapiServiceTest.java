@@ -3,9 +3,11 @@ package io.github.xezzon.geom.openapi;
 import cn.hutool.core.util.RandomUtil;
 import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.openapi.exception.OpenapiPublishedException;
+import io.github.xezzon.geom.openapi.exception.OpenapiUnpublishedException;
 import io.github.xezzon.geom.openapi.model.AddOpenapiQuery;
 import io.github.xezzon.geom.openapi.model.ModifyOpenapiQuery;
 import io.github.xezzon.geom.openapi.model.PublishOpenapiQuery;
+import io.github.xezzon.geom.openapi.repository.OpenapiInstanceRepository;
 import io.github.xezzon.geom.openapi.repository.OpenapiRepository;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -26,13 +28,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 class OpenapiServiceTest {
 
   private static final List<Openapi> OPENAPI_LIST = new ArrayList<>();
-  @Inject
-  protected transient OpenapiService service;
-  @Inject
-  protected transient OpenapiRepository repository;
 
-  @BeforeAll
-  void setUp() {
+  static {
     for (int i = 0, cnt = Byte.MAX_VALUE; i < cnt; i++) {
       Openapi openapi = new Openapi();
       openapi.setName(RandomUtil.randomString(6));
@@ -61,6 +58,17 @@ class OpenapiServiceTest {
       );
       OPENAPI_LIST.add(openapi);
     }
+  }
+
+  @Inject
+  private transient OpenapiService service;
+  @Inject
+  private transient OpenapiRepository repository;
+  @Inject
+  private transient OpenapiInstanceRepository instanceRepository;
+
+  @BeforeAll
+  void setUp() {
     repository.saveAll(OPENAPI_LIST);
   }
 
@@ -179,6 +187,7 @@ class OpenapiServiceTest {
     Assertions.assertEquals(before.size() - 1, after.size());
     Optional<Openapi> exist = repository.findById(openapi.getId());
     Assertions.assertTrue(exist.isEmpty());
+    OPENAPI_LIST.remove(openapi);
   }
 
   @Test
@@ -218,6 +227,36 @@ class OpenapiServiceTest {
     query.setPublishTime(Instant.now());
     Assertions.assertThrows(OpenapiPublishedException.class, () ->
         service.modifyOpenapi(query.into())
+    );
+  }
+
+  @Test
+  void subscribeOpenapi() {
+    Openapi openapi = OPENAPI_LIST.parallelStream()
+        .filter(Openapi::isPublished)
+        .findAny().get();
+    String ownerId = RandomUtil.randomString(32);
+    OpenapiInstance openapiInstance = new OpenapiInstance();
+    openapiInstance.setApiId(openapi.getId());
+    openapiInstance.setOwnerId(ownerId);
+    service.subscribeOpenapi(openapiInstance);
+    Optional<OpenapiInstance> after = instanceRepository
+        .findByApiIdAndOwnerId(openapi.getId(), ownerId);
+    Assertions.assertTrue(after.isPresent());
+  }
+
+  @Test
+  void subscribeOpenapi_unpublished() {
+    Openapi openapi = OPENAPI_LIST.parallelStream()
+        .filter(o -> !o.isPublished())
+        .findAny().get();
+    String ownerId = RandomUtil.randomString(32);
+    OpenapiInstance openapiInstance = new OpenapiInstance();
+    openapiInstance.setApiId(openapi.getId());
+    openapiInstance.setOwnerId(ownerId);
+    Assertions.assertThrows(
+        OpenapiUnpublishedException.class,
+        () -> service.subscribeOpenapi(openapiInstance)
     );
   }
 }

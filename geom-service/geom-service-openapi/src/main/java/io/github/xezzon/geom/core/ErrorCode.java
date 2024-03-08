@@ -8,6 +8,7 @@ package io.github.xezzon.geom.core;
 public enum ErrorCode {
 
   OPENAPI_PUBLISHED("A0101"),
+  OPENAPI_UNPUBLISHED("A0004"),
   ;
 
   private final String code;

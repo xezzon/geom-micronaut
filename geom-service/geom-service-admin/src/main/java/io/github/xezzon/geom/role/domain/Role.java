@@ -48,10 +48,10 @@ public class Role implements TreeNode<Role, String> {
   @Column(nullable = false)
   String name;
   /**
-   * 可创建下级角色
+   * 可继承的
    */
   @Column(nullable = false)
-  private Boolean inheritable;
+  Boolean inheritable;
   /**
    * 上级角色主键
    */

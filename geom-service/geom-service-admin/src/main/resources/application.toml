@@ -16,6 +16,12 @@ show_sql = true
 format_sql = true
 cdi.extensions = true
 
+[liquibase]
+[liquibase.datasources]
+[liquibase.datasources.default]
+change-log = "classpath:db/liquibase-changelog.xml"
+tag = "@project.version@"
+
 [geom]
 id-generator = "${GEOM_ID_GENERATOR:snowflake}"
 [geom.jwt]

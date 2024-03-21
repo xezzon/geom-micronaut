@@ -23,14 +23,14 @@
     <!-- 应用端口号 -->
     <app.port>8080</app.port>
     <!-- JavaAgent 存放路径 -->
-    <agent-extraction-root>${project.build.directory}/java-agents</agent-extraction-root>
+    <agent-extraction-root>${maven.multiModuleProjectDirectory}/agent</agent-extraction-root>
     <!-- JavaAgent 在Docker中的路径 -->
     <agent-path>/opt/agent</agent-path>
     <workdir>/app</workdir>
     <docker.host>ghcr.io/xezzon</docker.host>
     <!-- JavaAgent 名称 -->
-    <opentelemetry-javaagent.name>opentelemetry-javaagent</opentelemetry-javaagent.name>
-    <otel-ali-extension.name>otel-ali-extension</otel-ali-extension.name>
+    <opentelemetry-javaagent.name>opentelemetry-javaagent-2.2.0.jar</opentelemetry-javaagent.name>
+    <otel-ali-extension.name>ot-java-agent-extension-1.28.0.jar</otel-ali-extension.name>
   </properties>
 
   <dependencies>
@@ -232,7 +232,7 @@
                   <OTEL_LOGS_EXPORTER>otlp</OTEL_LOGS_EXPORTER>
                   <OTEL_SERVICE_NAME>${project.artifactId}</OTEL_SERVICE_NAME>
                   <OTEL_SDK_DISABLED>true</OTEL_SDK_DISABLED>
-                  <OTEL_JAVA_EXTENSIONS>${agent-path}/${otel-ali-extension.name}.jar</OTEL_JAVA_EXTENSIONS>
+                  <OTEL_JAVA_EXTENSIONS>${agent-path}/${otel-ali-extension.name}</OTEL_JAVA_EXTENSIONS>
                 </environment>
                 <ports>
                   <port>${app.port}</port>
@@ -242,7 +242,7 @@
                   <volume>${agent-path}</volume>
                 </volumes>
                 <jvmFlags>
-                  <jvmFlag>-javaagent:${agent-path}/${opentelemetry-javaagent.name}.jar</jvmFlag>
+                  <jvmFlag>-javaagent:${agent-path}/${opentelemetry-javaagent.name}</jvmFlag>
                 </jvmFlags>
                 <appRoot>${workdir}</appRoot>
                 <workingDirectory>${workdir}</workingDirectory>
@@ -263,40 +263,6 @@
                 <goals>
                   <goal>build</goal>
                 </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>com.googlecode.maven-download-plugin</groupId>
-            <artifactId>download-maven-plugin</artifactId>
-            <version>${download-maven-plugin.version}</version>
-            <configuration>
-              <readTimeOut>30000</readTimeOut>
-            </configuration>
-            <executions>
-              <execution>
-                <id>${opentelemetry-javaagent.name}</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>wget</goal>
-                </goals>
-                <configuration>
-                  <url>https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar</url>
-                  <outputDirectory>${agent-extraction-root}</outputDirectory>
-                  <outputFileName>${opentelemetry-javaagent.name}.jar</outputFileName>
-                </configuration>
-              </execution>
-              <execution>
-                <id>${otel-ali-extension.name}</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>wget</goal>
-                </goals>
-                <configuration>
-                  <url>https://github.com/alibabacloud-observability/opentelemetry-best-practice/raw/main/opentelemetry-javaagent-extension/ot-java-agent-extension-1.28.0.jar</url>
-                  <outputDirectory>${agent-extraction-root}</outputDirectory>
-                  <outputFileName>${otel-ali-extension.name}.jar</outputFileName>
-                </configuration>
               </execution>
             </executions>
           </plugin>

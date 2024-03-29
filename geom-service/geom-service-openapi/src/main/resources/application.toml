@@ -2,19 +2,6 @@
 environments = "${MICRONAUT_ENVIRONMENTS}"
 [micronaut.application]
 name = "geom-app-openapi"
-[micronaut.server]
-port = "@app.port@"
-
-[jackson]
-date-format = "yyyy-MM-dd HH:mm:ss"
-[jackson.deserialization]
-FAIL_ON_UNKNOWN_PROPERTIES = false
-
-[jpa]
-[jpa.default.properties.hibernate]
-show_sql = true
-format_sql = true
-cdi.extensions = true
 
 [geom]
 id-generator = "${GEOM_ID_GENERATOR:snowflake}"

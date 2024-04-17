@@ -8,11 +8,15 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
- * 新增角色的请求
+ * @author xezzon
  */
 @Data
-public class AddRoleQuery implements Into<Role> {
+public class ModifyRoleQuery implements Into<Role> {
 
+  /**
+   * 角色主键
+   */
+  String id;
   /**
    * 角色标识
    */
@@ -21,10 +25,6 @@ public class AddRoleQuery implements Into<Role> {
    * 角色描述
    */
   String name;
-  /**
-   * 可继承的
-   */
-  Boolean inheritable;
   /**
    * 上级角色主键
    */
@@ -36,14 +36,14 @@ public class AddRoleQuery implements Into<Role> {
   }
 
   @Mapper
-  interface Converter extends From<AddRoleQuery, Role> {
+  interface Converter extends From<ModifyRoleQuery, Role> {
 
     Converter INSTANCE = Mappers.getMapper(Converter.class);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "inheritable", ignore = true)
     @Mapping(target = "parent", ignore = true)
     @Mapping(target = "children", ignore = true)
     @Override
-    Role from(AddRoleQuery addRoleQuery);
+    Role from(ModifyRoleQuery modifyRoleQuery);
   }
 }

@@ -36,6 +36,14 @@ public class RoleService {
     roleDAO.get().save(role);
   }
 
+  protected void modifyRole(Role role) {
+    /* 前置校验 */
+    // 重复性校验
+    checkRepeat(role);
+    /* 数据持久化 */
+    roleDAO.update(role);
+  }
+
   @Transactional(rollbackFor = {Exception.class})
   protected void removeRole(String id) {
     /* 前置校验 */

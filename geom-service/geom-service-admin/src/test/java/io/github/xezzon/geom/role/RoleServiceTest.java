@@ -2,6 +2,7 @@ package io.github.xezzon.geom.role;
 
 import cn.hutool.core.util.RandomUtil;
 import io.github.xezzon.geom.role.domain.AddRoleQuery;
+import io.github.xezzon.geom.role.domain.ModifyRoleQuery;
 import io.github.xezzon.geom.role.domain.Role;
 import io.github.xezzon.geom.role.repository.RoleRepository;
 import io.github.xezzon.tao.exception.ClientException;
@@ -10,6 +11,7 @@ import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
@@ -123,5 +125,20 @@ class RoleServiceTest {
         dataset.parallelStream().map(Role::getId).toList(),
         repository.findAll().parallelStream().map(Role::getId).toList()
     );
+  }
+
+  @Test
+  void modifyRole() {
+    final List<Role> dataset = repository.findAll();
+    Role exist = dataset.parallelStream().findAny().get();
+    ModifyRoleQuery query = new ModifyRoleQuery();
+    query.setId(exist.getId());
+    query.setCode(RandomUtil.randomString(6));
+    query.setName(RandomUtil.randomString(6));
+    service.modifyRole(query.into());
+
+    Optional<Role> after = repository.findById(exist.getId());
+    Assertions.assertNotEquals(exist.getCode(), after.get().getCode());
+    Assertions.assertEquals(query.getCode(), after.get().getCode());
   }
 }

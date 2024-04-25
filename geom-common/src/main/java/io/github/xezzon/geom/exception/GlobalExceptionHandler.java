@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 全局异常处理器
  * @author xezzon
  */
 @Controller

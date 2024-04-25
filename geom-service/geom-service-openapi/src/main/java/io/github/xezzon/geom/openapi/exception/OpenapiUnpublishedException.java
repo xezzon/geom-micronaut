@@ -5,6 +5,7 @@ import io.github.xezzon.tao.exception.ClientException;
 import java.io.Serial;
 
 /**
+ * 接口未发布
  * @author xezzon
  */
 public class OpenapiUnpublishedException extends ClientException {

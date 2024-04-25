@@ -24,6 +24,10 @@ public class OpenapiService {
     this.openapiInstanceDAO = openapiInstanceDAO;
   }
 
+  /**
+   * 添加OpenAPI文档
+   * @param openapi 要添加的OpenAPI文档对象
+   */
   protected void addOpenapi(Openapi openapi) {
     /* 前置校验 */
     // 重复性校验
@@ -32,10 +36,21 @@ public class OpenapiService {
     openapiDAO.get().save(openapi);
   }
 
+  /**
+   * 查询openapi分页信息
+   * @param commonQuery 查询条件
+   * @return 分页对象，包含openapi信息
+   */
   protected Page<Openapi> queryOpenapiPage(CommonQuery commonQuery) {
     return openapiDAO.query(commonQuery);
   }
 
+  /**
+   * 修改OpenAPI接口信息
+   * @param openapi 要修改的OpenAPI接口对象
+   * @throws NonexistentDataException 如果要修改的OpenAPI接口不存在，则抛出此异常
+   * @throws OpenapiPublishedException 如果要修改的OpenAPI接口已经发布，则抛出此异常
+   */
   protected void modifyOpenapi(Openapi openapi) {
     /* 前置校验 */
     // 重复性校验
@@ -53,6 +68,12 @@ public class OpenapiService {
     openapiDAO.update(openapi);
   }
 
+  /**
+   * 从数据库中删除指定ID的OpenAPI接口
+   * @param id 要删除的OpenAPI接口ID
+   * @throws NonexistentDataException 如果指定ID的OpenAPI接口不存在，则抛出此异常
+   * @throws OpenapiPublishedException 如果指定ID的OpenAPI接口已发布，则抛出此异常
+   */
   protected void removeOpenapi(String id) {
     /* 前置校验 */
     // 只允许删除未发布的接口
@@ -69,6 +90,10 @@ public class OpenapiService {
     openapiDAO.get().deleteById(id);
   }
 
+  /**
+   * 订阅OpenAPI实例
+   * @param openapiInstance OpenAPI实例对象
+   */
   protected void subscribeOpenapi(OpenapiInstance openapiInstance) {
     /* 前置校验 */
     checkRepeat(openapiInstance);
@@ -90,6 +115,13 @@ public class OpenapiService {
     }
   }
 
+  /**
+   * 检查OpenAPI实例是否重复
+   * @param openapiInstance OpenAPI实例
+   * @throws NonexistentDataException 如果OpenAPI实例所属的接口不存在
+   * @throws OpenapiUnpublishedException 如果OpenAPI实例所属的接口未发布
+   * @throws RepeatDataException 如果OpenAPI实例所属的接口已被其他用户订阅
+   */
   private void checkRepeat(OpenapiInstance openapiInstance) {
     Optional<Openapi> openapi = openapiDAO.get().findById(openapiInstance.getApiId());
     if (openapi.isEmpty()) {

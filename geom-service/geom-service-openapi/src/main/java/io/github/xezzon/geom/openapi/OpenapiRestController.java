@@ -64,11 +64,20 @@ public class OpenapiRestController {
     openapiService.removeOpenapi(id);
   }
 
+  /**
+   * 发布openapi接口
+   * @param query 包含openapi信息的发布请求体
+   */
   @Put("/publish")
   public void publishOpenapi(@Body PublishOpenapiQuery query) {
     openapiService.modifyOpenapi(query.into());
   }
 
+  /**
+   * 订阅OpenAPI实例
+   * @param apiId API的ID
+   * @param ownerId OpenAPI实例所有者的ID
+   */
   @Post("/{apiId}/instance/{ownerId}")
   public void subscribeOpenapi(@PathVariable String apiId, @PathVariable String ownerId) {
     OpenapiInstance openapiInstance = new OpenapiInstance();

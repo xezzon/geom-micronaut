@@ -11,6 +11,7 @@ import io.github.xezzon.geom.config.CommonInterceptor;
 import java.time.Instant;
 
 /**
+ * 系统管理HTTP接口 Java SDK
  * @author xezzon
  */
 public interface GeomAdminHttpClient {

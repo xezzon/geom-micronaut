@@ -44,6 +44,12 @@ public class AuthService {
     this.digestCryptoService = digestCryptoService;
   }
 
+  /**
+   * 用户登录方法
+   * @param username 用户名
+   * @param cipher 密码
+   * @throws ClientException 当用户名或密码错误时抛出
+   */
   protected void login(String username, String cipher) {
     if (StpUtil.isLogin()) {
       return;
@@ -63,16 +69,33 @@ public class AuthService {
         .set(AuthConstants.SUBJECT, dto);
   }
 
+  /**
+   * 获取当前登录用户信息
+   * @return 当前登录用户的UserDTO对象
+   */
   protected UserDTO getCurrentUser() {
     return StpUtil.getSession()
         .getModel(AuthConstants.SUBJECT, UserDTO.class);
   }
 
+  /**
+   * 生成并返回JWT（JSON Web Token）签名。 JWT中包含认证信息
+   * @return 返回生成的JWT签名字符串
+   */
   protected String signJwt() {
     UserDTO currentUser = this.getCurrentUser();
     return jwtCryptoService.sign(currentUser);
   }
 
+  /**
+   * 解密消息
+   * @param origin 加密后的消息
+   * @param accessKey 账户标识
+   * @param checksum 校验和
+   * @param date 时间戳
+   * @return 解密后的消息
+   * @throws ClientException 如果请求超时或无效的请求
+   */
   protected byte[] decryptMessage(byte[] origin, String accessKey, String checksum, Instant date) {
     if (date.isAfter(Instant.now().minus(1, ChronoUnit.MINUTES))) {
       throw new ClientException("请求超时");

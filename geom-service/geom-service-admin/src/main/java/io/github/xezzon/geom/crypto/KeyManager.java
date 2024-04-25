@@ -45,6 +45,9 @@ public class KeyManager {
     ObserverContext.register(PublicKeyGeneratedEvent.class, this::savePublicKeyToClasspath);
   }
 
+  /**
+   * 在应用启动后，加载私钥。 如果无法找到私钥文件或解析失败，则生成新的密钥对并保存私钥文件。 加载成功后，将公钥广播出去。
+   */
   @PostConstruct
   public void loadPrivateKey() {
     /* 获取私钥文件 */
@@ -87,6 +90,10 @@ public class KeyManager {
     ObserverContext.post(new PublicKeyGeneratedEvent(publicKey));
   }
 
+  /**
+   * 获取私钥
+   * @return 返回ECPrivateKey类型的私钥
+   */
   public java.security.interfaces.ECPrivateKey getPrivateKey() {
     return (java.security.interfaces.ECPrivateKey) this.privateKey;
   }

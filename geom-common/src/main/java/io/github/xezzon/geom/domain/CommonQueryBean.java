@@ -16,6 +16,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
+ * 查询条件
  * @author xezzon
  */
 @Getter
@@ -24,18 +25,36 @@ import org.mapstruct.factory.Mappers;
 @Introspected
 public class CommonQueryBean implements Into<CommonQuery> {
 
+  /**
+   * 查询的列
+   */
   @QueryValue
   protected Set<String> select = null;
+  /**
+   * 排序
+   */
   @QueryValue
   protected List<String> sort = Collections.emptyList();
+  /**
+   * 筛选条件
+   */
   @QueryValue
   @Nullable
   protected String filter = null;
+  /**
+   * 搜索条件
+   */
   @QueryValue
   @Nullable
   protected String searchKey = null;
+  /**
+   * 页码 从1开始
+   */
   @QueryValue
   protected int pageNum = 0;
+  /**
+   * 每页大小
+   */
   @QueryValue
   protected int pageSize = 0;
 

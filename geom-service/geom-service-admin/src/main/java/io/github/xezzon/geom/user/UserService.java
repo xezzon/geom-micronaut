@@ -19,6 +19,12 @@ public class UserService implements IUserService4Auth, IUserService4Group {
     this.userDAO = userDAO;
   }
 
+  /**
+   * 添加用户
+   * @param user 待添加的用户
+   * @return 返回添加后的用户信息，包含用户ID和昵称
+   * @throws ClientException 如果用户名已存在，则抛出此异常
+   */
   protected User addUser(@NotNull User user) {
     String username = user.getUsername();
     boolean exists = userDAO.get().existsByUsername(username);
@@ -38,6 +44,11 @@ public class UserService implements IUserService4Auth, IUserService4Group {
         .setNickname(user.getNickname());
   }
 
+  /**
+   * 根据用户ID获取用户信息
+   * @param id 用户ID
+   * @return 用户信息，如果ID为空则返回null，如果ID不存在则返回Optional.empty()
+   */
   protected User getById(String id) {
     if (id == null) {
       return null;
@@ -45,6 +56,11 @@ public class UserService implements IUserService4Auth, IUserService4Group {
     return userDAO.get().findById(id).orElse(null);
   }
 
+  /**
+   * 根据用户名获取用户信息
+   * @param username 用户名
+   * @return 返回与用户名对应的用户信息，若不存在则返回null
+   */
   protected User getByUsername(String username) {
     if (username == null) {
       return null;

@@ -12,7 +12,13 @@ import org.mapstruct.factory.Mappers;
 @Data
 public class PublishOpenapiQuery implements Into<Openapi> {
 
+  /**
+   * 待发布的对外接口ID
+   */
   private String id;
+  /**
+   * 发布时间
+   */
   private Instant publishTime;
 
   @Override

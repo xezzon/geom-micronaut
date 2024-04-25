@@ -25,6 +25,11 @@ public class MenuService {
     this.menuDAO = menuDAO;
   }
 
+  /**
+   * 根据父级菜单ID获取菜单树
+   * @param parentId 父级菜单ID
+   * @return 包含所有子菜单的菜单列表
+   */
   protected List<Menu> menuTree(String parentId) {
     List<Menu> menus = Tree.topDown(
         Collections.singleton(parentId), -1, menuDAO.get()::findByParentIdInOrderByOrdinalAsc
@@ -45,6 +50,11 @@ public class MenuService {
     return menus;
   }
 
+  /**
+   * 向系统中添加一个菜单项
+   * @param menu 待添加的菜单项
+   * @throws ClientException 如果已存在相同路径的同级菜单，则抛出此异常
+   */
   @Transactional(rollbackFor = Exception.class)
   protected void addMenu(Menu menu) {
     Optional<Menu> optionalMenu = menuDAO.get()
@@ -57,6 +67,11 @@ public class MenuService {
     menuDAO.get().save(menu);
   }
 
+  /**
+   * 修改菜单信息
+   * @param menu 要修改的菜单对象
+   * @throws ClientException 如果已存在相同路径的同级菜单，则抛出此异常
+   */
   protected void modifyMenu(Menu menu) {
     Optional<Menu> optionalMenu = menuDAO.get()
         .findByParentIdAndPath(menu.getParentId(), menu.getPath());
@@ -68,6 +83,10 @@ public class MenuService {
     menuDAO.get().update(menu);
   }
 
+  /**
+   * 从菜单树中删除指定ID的菜单及其所有子菜单
+   * @param id 待删除菜单的ID
+   */
   protected void removeMenu(String id) {
     List<Menu> menus = Tree.topDown(
         Collections.singleton(id), -1, menuDAO.get()::findByParentIdInOrderByOrdinalAsc

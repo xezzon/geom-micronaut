@@ -19,6 +19,7 @@ import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
+ * 加密、散列相关
  * @author xezzon
  */
 @Bean

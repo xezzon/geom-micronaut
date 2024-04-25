@@ -71,11 +71,20 @@ public class DictController {
     return dictService.dictByTagAndCode(tag, code);
   }
 
+  /**
+   * 从字典服务中删除指定id的字典项
+   * @param id 要删除的字典项的id
+   */
   @Delete("/{id}")
   public void remove(@PathVariable String id) {
     dictService.removeDict(id);
   }
 
+  /**
+   * 修改字典项
+   * @param dict 要修改的字典项对象
+   * @return 返回修改后的字典项ID
+   */
   @Put()
   public Id modifyDict(@Body @Valid Dict dict) {
     dictService.modifyDict(dict);

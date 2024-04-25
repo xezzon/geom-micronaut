@@ -17,10 +17,19 @@ import org.mapstruct.factory.Mappers;
 @Data
 public class AddOpenapiQuery implements Into<Openapi> {
 
+  /**
+   * 接口名称
+   */
   @NotBlank
   private String name;
+  /**
+   * 调用路径
+   */
   @Pattern(regexp = "^[\\w-]+$")
   private String code;
+  /**
+   * 转发路径
+   */
   @NotBlank
   private String path;
 

@@ -24,10 +24,20 @@ public class DictService {
     this.dictDAO = dictDAO;
   }
 
+  /**
+   * 根据查询条件获取字典标签分页信息
+   * @param params 查询条件
+   * @return 分页对象，包含字典标签信息
+   */
   protected Page<Dict> dictTagPage(CommonQuery params) {
     return dictDAO.query(params);
   }
 
+  /**
+   * 添加字典项
+   * @param dict 要添加的字典项
+   * @throws ClientException 如果字典标签和字典码已存在，则抛出此异常
+   */
   protected void addDict(Dict dict) {
     Optional<Dict> exist = dictDAO.get().findByTagAndCode(dict.getTag(), dict.getCode());
     if (exist.isEmpty()) {
@@ -36,11 +46,20 @@ public class DictService {
     dictDAO.get().save(dict);
   }
 
+  /**
+   * 根据字典标签获取字典列表
+   * @param tag 字典标签
+   * @return 字典列表
+   */
   protected List<Dict> dictListByTag(String tag) {
     List<Dict> dictList = dictDAO.get().findByTag(tag);
     return Tree.fold(dictList);
   }
 
+  /**
+   * 根据给定的字典ID，删除该字典及其所有子字典
+   * @param id 字典ID
+   */
   protected void removeDict(String id) {
     List<Dict> dictList = Tree.topDown(Collections.singleton(id), -1,
         dictDAO.get()::findByParentIdIn);
@@ -51,10 +70,20 @@ public class DictService {
     dictDAO.get().deleteByIdIn(dictIdSet);
   }
 
+  /**
+   * 修改字典项
+   * @param dict 要修改的字典项
+   */
   protected void modifyDict(Dict dict) {
     dictDAO.get().save(dict);
   }
 
+  /**
+   * 根据标签和编码获取字典项
+   * @param tag 字典目
+   * @param code 字典码
+   * @return 匹配到的字典项，若未找到则返回null
+   */
   protected Dict dictByTagAndCode(String tag, String code) {
     return dictDAO.get().findByTagAndCode(tag, code).orElse(null);
   }

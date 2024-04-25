@@ -19,6 +19,11 @@ public class RoleService {
     this.roleDAO = roleDAO;
   }
 
+  /**
+   * 添加角色
+   * @param role 要添加的角色
+   * @throws ClientException 如果角色不存在或不能继承，则抛出此异常
+   */
   protected void addRole(Role role) {
     /* 前置校验 */
     // 校验是否可以新增
@@ -36,6 +41,10 @@ public class RoleService {
     roleDAO.get().save(role);
   }
 
+  /**
+   * 修改角色信息
+   * @param role 要修改的角色对象
+   */
   protected void modifyRole(Role role) {
     /* 前置校验 */
     // 重复性校验
@@ -44,6 +53,10 @@ public class RoleService {
     roleDAO.update(role);
   }
 
+  /**
+   * 从数据库中删除指定ID的角色及其所有子角色
+   * @param id 要删除的角色ID
+   */
   @Transactional(rollbackFor = {Exception.class})
   protected void removeRole(String id) {
     /* 前置校验 */
@@ -57,6 +70,11 @@ public class RoleService {
     roleDAO.get().deleteAll(children);
   }
 
+  /**
+   * 检查角色是否重复
+   * @param role 待检查的角色
+   * @throws ClientException 如果已存在相同代码的角色且ID不相等，则抛出此异常
+   */
   private void checkRepeat(Role role) {
     Optional<Role> exist = roleDAO.get().findByCode(role.getCode());
     if (exist.isPresent() && !Objects.equals(exist.get().getId(), role.getId())) {

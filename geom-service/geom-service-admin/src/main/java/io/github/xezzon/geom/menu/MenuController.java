@@ -34,18 +34,32 @@ public class MenuController {
     return menuService.menuTree("0");
   }
 
+  /**
+   * 添加菜单
+   * @param menu 要添加的菜单对象
+   * @return 返回添加后菜单的ID
+   */
   @Post()
   public Id addMenu(@Body Menu menu) {
     menuService.addMenu(menu);
     return Id.of(menu.getId());
   }
 
+  /**
+   * 修改菜单
+   * @param menu 待修改的菜单对象
+   * @return 返回修改后的菜单ID
+   */
   @Put()
   public Id modifyMenu(@Body Menu menu) {
     menuService.modifyMenu(menu);
     return Id.of(menu.getId());
   }
 
+  /**
+   * 删除菜单项
+   * @param id 菜单项ID
+   */
   @Delete("/{id}")
   public void removeMenu(@PathVariable String id) {
     menuService.removeMenu(id);

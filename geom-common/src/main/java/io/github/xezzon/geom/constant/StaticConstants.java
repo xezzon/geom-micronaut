@@ -10,6 +10,9 @@ import lombok.Getter;
 @Factory
 public class StaticConstants {
 
+  /**
+   * 混淆ID的盐
+   */
   @Getter
   private static String hashidsSalt = "hashids";
 

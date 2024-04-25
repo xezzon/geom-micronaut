@@ -16,6 +16,9 @@ public class OpenapiInstanceController {
     this.openapiService = openapiService;
   }
 
+  /**
+   * TODO
+   */
   @Get()
   public Page<OpenapiInstance> getOpenapiInstancePage() {
     return Page.empty();

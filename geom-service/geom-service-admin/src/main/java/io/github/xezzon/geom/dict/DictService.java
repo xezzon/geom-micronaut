@@ -1,7 +1,7 @@
 package io.github.xezzon.geom.dict;
 
 import io.github.xezzon.geom.dict.domain.Dict;
-import io.github.xezzon.tao.exception.ClientException;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.github.xezzon.tao.tree.Tree;
 import io.micronaut.data.model.Page;
@@ -36,12 +36,12 @@ public class DictService {
   /**
    * 添加字典项
    * @param dict 要添加的字典项
-   * @throws ClientException 如果字典标签和字典码已存在，则抛出此异常
+   * @throws RepeatDataException 如果字典标签和字典码已存在，则抛出此异常
    */
   protected void addDict(Dict dict) {
     Optional<Dict> exist = dictDAO.get().findByTagAndCode(dict.getTag(), dict.getCode());
     if (exist.isEmpty()) {
-      throw new ClientException("字典码已存在");
+      throw new RepeatDataException("字典码已存在");
     }
     dictDAO.get().save(dict);
   }

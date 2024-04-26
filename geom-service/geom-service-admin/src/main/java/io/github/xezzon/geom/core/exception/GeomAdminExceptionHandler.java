@@ -1,6 +1,7 @@
 package io.github.xezzon.geom.core.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import io.github.xezzon.geom.exception.UnauthenticatedException;
 import io.github.xezzon.tao.web.Result;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
@@ -19,7 +20,7 @@ public class GeomAdminExceptionHandler {
   @Error(NotLoginException.class)
   @Status(HttpStatus.UNAUTHORIZED)
   public Result<Void> handleNotLoginException(NotLoginException e) {
-    UnauthorizedException ue = new UnauthorizedException(e);
+    UnauthenticatedException ue = new UnauthenticatedException(e);
     return Result.fail(ue);
   }
 }

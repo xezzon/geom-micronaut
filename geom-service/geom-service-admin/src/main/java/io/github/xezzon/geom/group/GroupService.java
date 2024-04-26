@@ -1,14 +1,15 @@
 package io.github.xezzon.geom.group;
 
+import io.github.xezzon.geom.core.exception.InvalidTokenException;
 import io.github.xezzon.geom.crypto.service.SymmetricCryptoService;
+import io.github.xezzon.geom.exception.NonexistentDataException;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.group.domain.Group;
 import io.github.xezzon.geom.group.domain.GroupMember;
 import io.github.xezzon.geom.group.domain.GroupMemberUser;
 import io.github.xezzon.geom.group.service.IGroupService4Auth;
 import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.user.service.IUserService4Group;
-import io.github.xezzon.tao.exception.ClientException;
-import io.github.xezzon.tao.exception.ServerException;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import jakarta.inject.Singleton;
@@ -64,12 +65,12 @@ public class GroupService implements IGroupService4Auth {
   /**
    * 添加用户组
    * @param group 用户组对象
-   * @throws ClientException 如果已存在相同编号和所有者的用户组，则抛出此异常
+   * @throws RepeatDataException 如果已存在相同编号和所有者的用户组，则抛出此异常
    */
   protected void addGroup(Group group) {
     // 检查重复项
     if (groupDAO.get().existsByCodeAndOwnerId(group.getCode(), group.getOwnerId())) {
-      throw new ClientException("用户组" + group.getCode() + "已存在");
+      throw new RepeatDataException("用户组" + group.getCode() + "已存在");
     }
 
     groupDAO.get().save(group);
@@ -98,7 +99,7 @@ public class GroupService implements IGroupService4Auth {
    * 生成用户组的对称加密密钥
    * @param groupId 用户组ID
    * @return 对称加密密钥
-   * @throws ServerException 如果用户组不存在，则抛出该异常
+   * @throws NonexistentDataException 如果用户组不存在，则抛出该异常
    */
   protected String generateSecretKey(String groupId) {
     String secretKey = symmetricCryptoService.generateSymmetricSecretKey();
@@ -107,7 +108,7 @@ public class GroupService implements IGroupService4Auth {
     group.setSecretKey(secretKey);
     boolean updated = groupDAO.update(group);
     if (!updated) {
-      throw new ServerException("用户组不存在");
+      throw new NonexistentDataException("用户组不存在");
     }
     return secretKey;
   }
@@ -142,11 +143,11 @@ public class GroupService implements IGroupService4Auth {
    * @param groupId 用户组ID
    * @param membersId 要移除的成员ID集合
    * @return 成功移除的成员数量
-   * @throws ClientException 如果用户组不存在，则抛出此异常
+   * @throws NonexistentDataException 如果用户组不存在，则抛出此异常
    */
   protected int removeMember(String groupId, Collection<String> membersId) {
     Group group = groupDAO.get().findById(groupId)
-        .orElseThrow(() -> new ClientException("用户组不存在"));
+        .orElseThrow(() -> new NonexistentDataException("用户组不存在"));
     return groupMemberDAO.get().deleteByIdInAndGroupIdAndUserIdNot(
         membersId, groupId, group.getOwnerId()
     );
@@ -156,6 +157,6 @@ public class GroupService implements IGroupService4Auth {
   public String getSecretKey(String groupId) {
     return groupDAO.get().findById(groupId)
         .map(Group::getSecretKey)
-        .orElseThrow(() -> new ClientException("获取不到密钥"));
+        .orElseThrow(() -> new InvalidTokenException("获取不到密钥"));
   }
 }

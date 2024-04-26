@@ -3,9 +3,9 @@ package io.github.xezzon.geom.user;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.user.repository.UserRepository;
-import io.github.xezzon.tao.exception.BaseException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.time.Instant;
@@ -44,6 +44,6 @@ class UserServiceTest {
         BCrypt.checkpw(user.getPlaintext(), existUser.get().getCipher())
     );
     /* 测试预期异常 */
-    Assertions.assertThrows(BaseException.class, () -> userService.addUser(user));
+    Assertions.assertThrows(RepeatDataException.class, () -> userService.addUser(user));
   }
 }

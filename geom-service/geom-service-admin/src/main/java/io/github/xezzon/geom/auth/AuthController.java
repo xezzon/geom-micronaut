@@ -3,7 +3,7 @@ package io.github.xezzon.geom.auth;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import io.github.xezzon.geom.user.UserDTO;
+import io.github.xezzon.geom.domain.UserDTO;
 import io.github.xezzon.tao.logger.LogRecord;
 import io.micronaut.http.BasicAuth;
 import io.micronaut.http.HttpHeaders;

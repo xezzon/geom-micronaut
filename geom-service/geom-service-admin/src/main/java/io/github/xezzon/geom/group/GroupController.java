@@ -5,11 +5,11 @@ import cn.hutool.core.util.HexUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import io.github.xezzon.geom.core.exception.InvalidPublicKeyException;
 import io.github.xezzon.geom.domain.Id;
+import io.github.xezzon.geom.group.domain.AddGroupQuery;
 import io.github.xezzon.geom.group.domain.Group;
 import io.github.xezzon.geom.group.domain.GroupMemberUser;
-import io.github.xezzon.geom.group.domain.AddGroupQuery;
-import io.github.xezzon.tao.exception.ServerException;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -75,7 +75,7 @@ public class GroupController {
   @Patch("/{id}/secret-key")
   public String refreshSecretKey(@PathVariable String id, String publicKey) {
     if (publicKey == null) {
-      throw new ServerException("缺少参数，无法生成密钥");
+      throw new InvalidPublicKeyException();
     }
     String secretKey = groupService.generateSecretKey(id);
     RSA rsa = new RSA(

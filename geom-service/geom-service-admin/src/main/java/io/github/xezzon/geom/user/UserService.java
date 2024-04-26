@@ -1,9 +1,9 @@
 package io.github.xezzon.geom.user;
 
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.user.service.IUserService4Auth;
 import io.github.xezzon.geom.user.service.IUserService4Group;
-import io.github.xezzon.tao.exception.ClientException;
 import io.micronaut.context.annotation.Bean;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,13 +23,13 @@ public class UserService implements IUserService4Auth, IUserService4Group {
    * 添加用户
    * @param user 待添加的用户
    * @return 返回添加后的用户信息，包含用户ID和昵称
-   * @throws ClientException 如果用户名已存在，则抛出此异常
+   * @throws RepeatDataException 如果用户名已存在，则抛出此异常
    */
   protected User addUser(@NotNull User user) {
     String username = user.getUsername();
     boolean exists = userDAO.get().existsByUsername(username);
     if (exists) {
-      throw new ClientException("用户名" + username + "已注册");
+      throw new RepeatDataException("用户名" + username + "已注册");
     }
 
     if (user.getNickname() == null) {

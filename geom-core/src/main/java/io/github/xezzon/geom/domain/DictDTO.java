@@ -1,4 +1,4 @@
-package io.github.xezzon.geom.dict;
+package io.github.xezzon.geom.domain;
 
 import java.util.List;
 import lombok.Getter;

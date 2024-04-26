@@ -2,8 +2,8 @@ package io.github.xezzon.geom.openapi;
 
 import io.github.xezzon.geom.exception.NonexistentDataException;
 import io.github.xezzon.geom.exception.RepeatDataException;
-import io.github.xezzon.geom.openapi.exception.OpenapiPublishedException;
-import io.github.xezzon.geom.openapi.exception.OpenapiUnpublishedException;
+import io.github.xezzon.geom.core.exception.OpenapiPublishedException;
+import io.github.xezzon.geom.core.exception.OpenapiUnpublishedException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.micronaut.data.model.Page;
 import jakarta.inject.Singleton;

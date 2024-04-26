@@ -1,7 +1,7 @@
 package io.github.xezzon.geom.menu;
 
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.menu.domain.Menu;
-import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.tree.Tree;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
@@ -53,33 +53,21 @@ public class MenuService {
   /**
    * 向系统中添加一个菜单项
    * @param menu 待添加的菜单项
-   * @throws ClientException 如果已存在相同路径的同级菜单，则抛出此异常
+   * @throws RepeatDataException 如果已存在相同路径的同级菜单，则抛出此异常
    */
   @Transactional(rollbackFor = Exception.class)
   protected void addMenu(Menu menu) {
-    Optional<Menu> optionalMenu = menuDAO.get()
-        .findByParentIdAndPath(menu.getParentId(), menu.getPath());
-    if (optionalMenu.isPresent()) {
-      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
-        throw new ClientException("已存在相同路径的同级菜单");
-      }
-    }
+    checkRepeat(menu);
     menuDAO.get().save(menu);
   }
 
   /**
    * 修改菜单信息
    * @param menu 要修改的菜单对象
-   * @throws ClientException 如果已存在相同路径的同级菜单，则抛出此异常
+   * @throws RepeatDataException 如果已存在相同路径的同级菜单，则抛出此异常
    */
   protected void modifyMenu(Menu menu) {
-    Optional<Menu> optionalMenu = menuDAO.get()
-        .findByParentIdAndPath(menu.getParentId(), menu.getPath());
-    if (optionalMenu.isPresent()) {
-      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
-        throw new ClientException("已存在相同路径的同级菜单");
-      }
-    }
+    checkRepeat(menu);
     menuDAO.get().update(menu);
   }
 
@@ -96,5 +84,20 @@ public class MenuService {
         .collect(Collectors.toSet());
     menuIdSet.add(id);
     menuDAO.get().deleteByIdIn(menuIdSet);
+  }
+
+  /**
+   * 检查菜单是否重复
+   * @param menu 待检查的菜单对象
+   * @throws RepeatDataException 如果已存在相同路径的同级菜单，则抛出此异常
+   */
+  private void checkRepeat(Menu menu) {
+    Optional<Menu> optionalMenu = menuDAO.get()
+        .findByParentIdAndPath(menu.getParentId(), menu.getPath());
+    if (optionalMenu.isPresent()) {
+      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
+        throw new RepeatDataException("已存在相同路径的同级菜单");
+      }
+    }
   }
 }

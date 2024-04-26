@@ -1,5 +1,7 @@
 package io.github.xezzon.geom.role;
 
+import io.github.xezzon.geom.exception.NonexistentDataException;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.role.domain.Role;
 import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.tree.Tree;
@@ -29,9 +31,9 @@ public class RoleService {
     // 校验是否可以新增
     Optional<Role> parent = roleDAO.get().findById(role.getParentId());
     if (parent.isEmpty()) {
-      throw new ClientException("角色已失效");
+      throw new NonexistentDataException("角色已失效");
     }
-    if (!parent.get().getInheritable()) {
+    if (Boolean.FALSE.equals(parent.get().getInheritable())) {
       throw new ClientException("该角色不能继承");
     }
     // TODO: 校验当前用户是否拥有对应的角色
@@ -73,12 +75,12 @@ public class RoleService {
   /**
    * 检查角色是否重复
    * @param role 待检查的角色
-   * @throws ClientException 如果已存在相同代码的角色且ID不相等，则抛出此异常
+   * @throws RepeatDataException 如果已存在相同代码的角色且ID不相等，则抛出此异常
    */
   private void checkRepeat(Role role) {
     Optional<Role> exist = roleDAO.get().findByCode(role.getCode());
     if (exist.isPresent() && !Objects.equals(exist.get().getId(), role.getId())) {
-      throw new ClientException("该角色已存在");
+      throw new RepeatDataException("该角色已存在");
     }
   }
 }

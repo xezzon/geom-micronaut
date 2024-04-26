@@ -2,8 +2,8 @@ package io.github.xezzon.geom.openapi;
 
 import cn.hutool.core.util.RandomUtil;
 import io.github.xezzon.geom.exception.RepeatDataException;
-import io.github.xezzon.geom.openapi.exception.OpenapiPublishedException;
-import io.github.xezzon.geom.openapi.exception.OpenapiUnpublishedException;
+import io.github.xezzon.geom.core.exception.OpenapiPublishedException;
+import io.github.xezzon.geom.core.exception.OpenapiUnpublishedException;
 import io.github.xezzon.geom.openapi.model.AddOpenapiQuery;
 import io.github.xezzon.geom.openapi.model.ModifyOpenapiQuery;
 import io.github.xezzon.geom.openapi.model.PublishOpenapiQuery;

@@ -16,8 +16,8 @@ import java.util.Optional;
 @Singleton
 public class OpenapiService {
 
-  private final transient OpenapiDAO openapiDAO;
-  private final transient OpenapiInstanceDAO openapiInstanceDAO;
+  private final OpenapiDAO openapiDAO;
+  private final OpenapiInstanceDAO openapiInstanceDAO;
 
   public OpenapiService(OpenapiDAO openapiDAO, OpenapiInstanceDAO openapiInstanceDAO) {
     this.openapiDAO = openapiDAO;

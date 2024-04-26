@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 @Bean
 public class UserService implements IUserService4Auth, IUserService4Group {
 
-  private final transient UserDAO userDAO;
+  private final UserDAO userDAO;
 
   UserService(UserDAO userDAO) {
     this.userDAO = userDAO;

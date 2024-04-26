@@ -29,7 +29,7 @@ import java.util.List;
 @Controller("/user-group")
 public class GroupController {
 
-  private final transient GroupService groupService;
+  private final GroupService groupService;
 
   public GroupController(GroupService groupService) {
     this.groupService = groupService;

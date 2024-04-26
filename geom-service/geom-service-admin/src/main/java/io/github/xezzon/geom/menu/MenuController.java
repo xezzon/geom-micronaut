@@ -18,7 +18,7 @@ import java.util.List;
 @Controller("/menu")
 public class MenuController {
 
-  private final transient MenuService menuService;
+  private final MenuService menuService;
 
   @Inject
   MenuController(MenuService menuService) {

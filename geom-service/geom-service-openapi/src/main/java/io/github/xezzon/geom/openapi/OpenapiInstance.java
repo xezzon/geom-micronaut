@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.io.Serial;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -57,4 +58,23 @@ public class OpenapiInstance extends BaseEntity<String> {
    */
   @Column(name = OWNER_ID_COLUMN, nullable = false)
   private String ownerId;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof OpenapiInstance that)) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    return Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), id);
+  }
 }

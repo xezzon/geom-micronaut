@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class MenuService {
 
-  private final transient MenuDAO menuDAO;
+  private final MenuDAO menuDAO;
 
   MenuService(MenuDAO menuDAO) {
     this.menuDAO = menuDAO;
@@ -38,10 +38,10 @@ public class MenuService {
     List<Menu> children = menus;
     while (!children.isEmpty()) {
       children = children.stream()
-          .filter((menu) -> Objects.nonNull(menu.getChildren()))
-          .peek((menu) -> menu
+          .filter(menu -> Objects.nonNull(menu.getChildren()))
+          .peek(menu -> menu
               .getChildren()
-              .forEach((child) -> child.setParent(menu))
+              .forEach(child -> child.setParent(menu))
           )
           .map(Menu::getChildren)
           .flatMap(Collection::stream)

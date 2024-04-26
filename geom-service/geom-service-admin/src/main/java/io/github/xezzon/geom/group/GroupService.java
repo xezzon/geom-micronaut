@@ -25,10 +25,10 @@ import java.util.stream.Collectors;
 @Singleton
 public class GroupService implements IGroupService4Auth {
 
-  private final transient GroupDAO groupDAO;
-  private final transient GroupMemberDAO groupMemberDAO;
-  private final transient IUserService4Group userService;
-  private final transient SymmetricCryptoService symmetricCryptoService;
+  private final GroupDAO groupDAO;
+  private final GroupMemberDAO groupMemberDAO;
+  private final IUserService4Group userService;
+  private final SymmetricCryptoService symmetricCryptoService;
 
   public GroupService(
       GroupDAO groupDAO,

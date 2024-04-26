@@ -12,7 +12,7 @@ import io.micronaut.http.annotation.Post;
 @Controller("/user")
 public class UserController {
 
-  private final transient UserService userService;
+  private final UserService userService;
 
   public UserController(UserService userService) {
     this.userService = userService;

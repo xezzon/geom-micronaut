@@ -6,6 +6,9 @@ package io.github.xezzon.geom.auth.constant;
  */
 public class AuthConstants {
 
+  private AuthConstants() {
+  }
+
   /**
    * Session 中存储认证信息的 KEY
    */

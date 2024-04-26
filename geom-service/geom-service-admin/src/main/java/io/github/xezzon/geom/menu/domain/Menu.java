@@ -28,6 +28,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "geom_menu")
 public class Menu implements TreeNode<Menu, String> {
 
+  private static final String PATH_DELIMITER = "/";
+
   /**
    * 菜单主键
    */
@@ -96,7 +98,7 @@ public class Menu implements TreeNode<Menu, String> {
     if (this.parent != null) {
       fullPath += this.parent.getFullPath();
     }
-    fullPath = fullPath + "/" + this.path;
+    fullPath = fullPath + PATH_DELIMITER + this.path;
     return fullPath;
   }
 

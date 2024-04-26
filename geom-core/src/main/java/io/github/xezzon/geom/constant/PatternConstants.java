@@ -6,6 +6,9 @@ package io.github.xezzon.geom.constant;
  */
 public class PatternConstants {
 
+  private PatternConstants() {
+  }
+
   /**
    * 密码正则
    * 密码由至少8位有效字符构成，且包含 大小写字符/数字/特殊字符 中至少两类

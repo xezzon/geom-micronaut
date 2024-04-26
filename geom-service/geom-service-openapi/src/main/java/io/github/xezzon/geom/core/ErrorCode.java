@@ -3,7 +3,6 @@ package io.github.xezzon.geom.core;
 /**
  * 错误码分配
  * @author xezzon
- * @deprecated 这是一个临时方案
  */
 public enum ErrorCode {
 

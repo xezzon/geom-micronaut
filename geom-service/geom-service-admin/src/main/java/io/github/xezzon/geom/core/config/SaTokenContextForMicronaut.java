@@ -35,18 +35,18 @@ public class SaTokenContextForMicronaut implements SaTokenContext {
 
   public static Optional<HttpServletRequest> getServletRequest() {
     return ServerRequestContext.currentRequest()
-        .map((source) -> (ServletExchange<?, ?>) source)
+        .map(source -> (ServletExchange<?, ?>) source)
         .map(ServletExchange::getRequest)
         .map(ServletHttpRequest::getNativeRequest)
-        .map((request) -> (HttpServletRequest) request);
+        .map(HttpServletRequest.class::cast);
   }
 
   public static Optional<HttpServletResponse> getServletResponse() {
     return ServerRequestContext.currentRequest()
-        .map((source) -> ((ServletExchange<?, ?>) source))
+        .map(source -> ((ServletExchange<?, ?>) source))
         .map(ServletExchange::getResponse)
         .map(ServletHttpResponse::getNativeResponse)
-        .map((response) -> ((HttpServletResponse) response));
+        .map(HttpServletResponse.class::cast);
   }
 
   @Override

@@ -24,11 +24,11 @@ import java.time.temporal.ChronoUnit;
 @Bean
 public class AuthService {
 
-  private final transient IUserService4Auth userService;
-  private final transient IGroupService4Auth groupService;
-  private final transient JwtCryptoService jwtCryptoService;
-  private final transient SymmetricCryptoService symmetricCryptoService;
-  private final transient DigestCryptoService digestCryptoService;
+  private final IUserService4Auth userService;
+  private final IGroupService4Auth groupService;
+  private final JwtCryptoService jwtCryptoService;
+  private final SymmetricCryptoService symmetricCryptoService;
+  private final DigestCryptoService digestCryptoService;
 
   public AuthService(
       UserService userService,

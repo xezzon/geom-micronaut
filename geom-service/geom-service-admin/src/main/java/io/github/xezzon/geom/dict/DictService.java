@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Singleton
 public class DictService {
 
-  private final transient DictDAO dictDAO;
+  private final DictDAO dictDAO;
 
   DictService(DictDAO dictDAO) {
     this.dictDAO = dictDAO;

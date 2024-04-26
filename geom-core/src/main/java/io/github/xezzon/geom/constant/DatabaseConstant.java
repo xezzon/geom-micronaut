@@ -5,6 +5,9 @@ package io.github.xezzon.geom.constant;
  */
 public class DatabaseConstant {
 
+  private DatabaseConstant() {
+  }
+
   /**
    * 主键数据长度
    */

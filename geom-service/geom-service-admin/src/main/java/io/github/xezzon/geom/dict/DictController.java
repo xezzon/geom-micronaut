@@ -24,7 +24,7 @@ import java.util.List;
 @Controller("/dict")
 public class DictController {
 
-  private final transient DictService dictService;
+  private final DictService dictService;
 
   public DictController(DictService dictService) {
     this.dictService = dictService;

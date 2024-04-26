@@ -35,9 +35,9 @@ import org.bouncycastle.util.io.pem.PemObject;
 @Slf4j
 public class KeyManager {
 
-  public static final String algorithm = "EC";
-  private final transient GeomJwtConfig geomJwtConfig;
-  private transient PrivateKey privateKey;
+  public static final String ALGORITHM = "EC";
+  private final GeomJwtConfig geomJwtConfig;
+  private PrivateKey privateKey;
 
   public KeyManager(GeomJwtConfig geomJwtConfig) {
     this.geomJwtConfig = geomJwtConfig;
@@ -63,18 +63,19 @@ public class KeyManager {
       try (InputStream pemStream = new FileInputStream(privateKeyFile)) {
         /* 从文件中解析私钥 */
         PemObject pemObject = PemUtil.readPemObject(pemStream);
-        this.privateKey = KeyUtil.generatePrivateKey(algorithm, pemObject.getContent());
+        this.privateKey = KeyUtil.generatePrivateKey(ALGORITHM, pemObject.getContent());
       }
       /* 从私钥中提取公钥 */
       ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("secp256k1");
-      ECPoint Q = ecSpec.getG().multiply(((ECPrivateKey) this.privateKey).getD());
-      ECPublicKeySpec pubSpec = new ECPublicKeySpec(Q, ecSpec);
-      publicKey = KeyUtil.generatePublicKey(algorithm, pubSpec);
+      ECPoint qPoint = ecSpec.getG().multiply(((ECPrivateKey) this.privateKey).getD());
+      ECPublicKeySpec pubSpec = new ECPublicKeySpec(qPoint, ecSpec);
+      publicKey = KeyUtil.generatePublicKey(ALGORITHM, pubSpec);
     } catch (Exception ignored) {
+      log.debug("Cannot load private key from file.");
     }
     if (this.privateKey == null) {
       /* 获取不到文件或解析不了 则生成一对密钥 */
-      KeyPair ecc = KeyUtil.generateKeyPair(algorithm);
+      KeyPair ecc = KeyUtil.generateKeyPair(ALGORITHM);
       this.privateKey = ecc.getPrivate();
       publicKey = ecc.getPublic();
       /* 保存私钥 */

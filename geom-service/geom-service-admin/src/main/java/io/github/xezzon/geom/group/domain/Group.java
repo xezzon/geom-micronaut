@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serial;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -82,5 +83,25 @@ public class Group extends BaseEntity<String> {
         Hashids.create(StaticConstants.getHashidsSalt().toCharArray())
             .decodeToHex(accessKey)
     );
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    Group group = (Group) o;
+    return Objects.equals(id, group.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), id);
   }
 }

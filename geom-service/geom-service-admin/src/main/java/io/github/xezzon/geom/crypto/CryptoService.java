@@ -29,8 +29,8 @@ public class CryptoService implements JwtCryptoService, SymmetricCryptoService,
   public static final String SYMMETRIC_ALGORITHM = "SM4";
   public static final String DIGEST_ALGORITHM = "SM3";
 
-  private final transient GeomJwtConfig geomJwtConfig;
-  private final transient KeyManager keyManager;
+  private final GeomJwtConfig geomJwtConfig;
+  private final KeyManager keyManager;
 
   public CryptoService(GeomJwtConfig geomJwtConfig, KeyManager keyManager) {
     this.geomJwtConfig = geomJwtConfig;

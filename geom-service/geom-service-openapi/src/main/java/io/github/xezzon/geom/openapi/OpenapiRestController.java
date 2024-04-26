@@ -22,7 +22,7 @@ import io.micronaut.http.annotation.RequestBean;
 @Controller("/openapi")
 public class OpenapiRestController {
 
-  private final transient OpenapiService openapiService;
+  private final OpenapiService openapiService;
 
   public OpenapiRestController(OpenapiService openapiService) {
     this.openapiService = openapiService;

@@ -1,8 +1,8 @@
 package io.github.xezzon.geom.auth.event;
 
-import cn.hutool.crypto.KeyUtil;
 import io.github.xezzon.tao.observer.Observation;
 import java.security.PublicKey;
+import java.util.Base64;
 
 /**
  * 公钥生成事件
@@ -13,6 +13,6 @@ public record PublicKeyGeneratedEvent(
 ) implements Observation {
 
   public String getPublicKey() {
-    return KeyUtil.toBase64(publicKey);
+    return Base64.getEncoder().encodeToString(publicKey.getEncoded());
   }
 }

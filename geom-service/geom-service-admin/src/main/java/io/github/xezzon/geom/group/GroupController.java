@@ -1,7 +1,6 @@
 package io.github.xezzon.geom.group;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.HexUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -22,6 +21,7 @@ import io.micronaut.http.annotation.QueryValue;
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * @author xezzon
@@ -81,7 +81,7 @@ public class GroupController {
     RSA rsa = new RSA(
         null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
     );
-    return HexUtil.encodeHexStr(rsa.encrypt(secretKey, KeyType.PublicKey));
+    return Hex.toHexString(rsa.encrypt(secretKey, KeyType.PublicKey));
   }
 
   /**

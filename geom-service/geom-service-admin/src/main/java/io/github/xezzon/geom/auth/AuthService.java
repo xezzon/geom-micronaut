@@ -100,14 +100,15 @@ public class AuthService {
    * @throws UnmatchedChecksumException 如果校验和不匹配
    */
   protected byte[] decryptMessage(byte[] origin, String accessKey, String checksum, Instant date) {
-    if (date.isAfter(Instant.now().minus(1, ChronoUnit.MINUTES))) {
+    if (date.isBefore(Instant.now().minus(1, ChronoUnit.MINUTES))) {
       throw new ExpiredTimestampException();
     }
     Group group = new Group();
     group.setAccessKey(accessKey);
     String secretKey = groupService.getSecretKey(group.getId());
     byte[] target = symmetricCryptoService.symmetricDecrypt(origin, secretKey);
-    boolean checked = digestCryptoService.verifyDigest(target, checksum);
+    String timestamp = String.valueOf(date.getEpochSecond());
+    boolean checked = digestCryptoService.verifyDigest(target, checksum, timestamp);
     if (!checked) {
       throw new UnmatchedChecksumException();
     }

@@ -1,9 +1,9 @@
 package io.github.xezzon.geom.role;
 
+import io.github.xezzon.geom.core.exception.RoleCannotInheritException;
 import io.github.xezzon.geom.exception.NonexistentDataException;
 import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.role.domain.Role;
-import io.github.xezzon.tao.exception.ClientException;
 import io.github.xezzon.tao.tree.Tree;
 import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Singleton;
@@ -24,7 +24,8 @@ public class RoleService {
   /**
    * 添加角色
    * @param role 要添加的角色
-   * @throws ClientException 如果角色不存在或不能继承，则抛出此异常
+   * @throws RepeatDataException 如果角色不存在，则抛出此异常
+   * @throws RoleCannotInheritException 若上级角色不允许被继承，则抛出此异常
    */
   protected void addRole(Role role) {
     /* 前置校验 */
@@ -34,7 +35,7 @@ public class RoleService {
       throw new NonexistentDataException("角色已失效");
     }
     if (Boolean.FALSE.equals(parent.get().getInheritable())) {
-      throw new ClientException("该角色不能继承");
+      throw new RoleCannotInheritException();
     }
     // TODO: 校验当前用户是否拥有对应的角色
     // 重复性校验

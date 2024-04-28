@@ -49,10 +49,7 @@ public class UserService implements IUserService4Auth, IUserService4Group {
    * @param id 用户ID
    * @return 用户信息，如果ID为空则返回null，如果ID不存在则返回Optional.empty()
    */
-  protected User getById(String id) {
-    if (id == null) {
-      return null;
-    }
+  protected User getById(@NotNull String id) {
     return userDAO.get().findById(id).orElse(null);
   }
 
@@ -61,20 +58,17 @@ public class UserService implements IUserService4Auth, IUserService4Group {
    * @param username 用户名
    * @return 返回与用户名对应的用户信息，若不存在则返回null
    */
-  protected User getByUsername(String username) {
-    if (username == null) {
-      return null;
-    }
+  protected User getByUsername(@NotNull String username) {
     return userDAO.get().findByUsername(username).orElse(null);
   }
 
   @Override
-  public User getUserByUsername(String username) {
+  public User getUserByUsername(@NotNull String username) {
     return this.getByUsername(username);
   }
 
   @Override
-  public User getUserById(String userId) {
+  public User getUserById(@NotNull String userId) {
     return this.getById(userId);
   }
 }

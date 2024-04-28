@@ -94,10 +94,8 @@ public class MenuService {
   private void checkRepeat(Menu menu) {
     Optional<Menu> optionalMenu = menuDAO.get()
         .findByParentIdAndPath(menu.getParentId(), menu.getPath());
-    if (optionalMenu.isPresent()) {
-      if (!Objects.equals(menu.getId(), optionalMenu.get().getId())) {
-        throw new RepeatDataException("已存在相同路径的同级菜单");
-      }
+    if (optionalMenu.isPresent() && !Objects.equals(menu.getId(), optionalMenu.get().getId())) {
+      throw new RepeatDataException("已存在相同路径的同级菜单");
     }
   }
 }

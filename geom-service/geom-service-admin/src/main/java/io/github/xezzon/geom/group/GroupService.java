@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author xezzon
@@ -48,10 +49,7 @@ public class GroupService implements IGroupService4Auth {
    * @param userId 用户ID
    * @return 用户所在的所有分组列表，如果用户ID为空或用户不在任何分组中，返回空列表
    */
-  protected List<Group> listGroupByUserId(String userId) {
-    if (userId == null) {
-      return Collections.emptyList();
-    }
+  protected List<Group> listGroupByUserId(@NotNull String userId) {
     List<GroupMember> members = groupMemberDAO.get().findByUserId(userId);
     if (members.isEmpty()) {
       return Collections.emptyList();
@@ -106,10 +104,7 @@ public class GroupService implements IGroupService4Auth {
     Group group = new Group();
     group.setId(groupId);
     group.setSecretKey(secretKey);
-    boolean updated = groupDAO.update(group);
-    if (!updated) {
-      throw new NonexistentDataException("用户组不存在");
-    }
+    groupDAO.update(group);
     return secretKey;
   }
 

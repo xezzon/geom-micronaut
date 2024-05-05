@@ -14,8 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +37,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class Dict implements IDict, TreeNode<Dict, String> {
 
+  public static final String ROOT_ID = "0";
+  public static final String ROOT_CODE = "dict";
   static final String TAG_COLUMN = "tag";
   static final String CODE_COLUMN = "code";
 
@@ -54,13 +54,10 @@ public class Dict implements IDict, TreeNode<Dict, String> {
    * 字典目
    */
   @Column(name = TAG_COLUMN, nullable = false, updatable = false)
-  @NotNull(message = "字典目不能为空")
   String tag;
   /**
    * 字典值
    */
-  @NotNull(message = "字典编码不能为空")
-  @Pattern(regexp = "[\\w-]+", message = "字典编码只允许英文字母、下划线、短横线")
   @Column(name = CODE_COLUMN, nullable = false, updatable = false)
   String code;
   /**

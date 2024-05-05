@@ -5,6 +5,7 @@ import io.github.xezzon.geom.dict.domain.QDict;
 import io.github.xezzon.geom.dict.repository.DictRepository;
 import io.github.xezzon.tao.jpa.BaseJpaWrapper;
 import io.micronaut.data.annotation.Repository;
+import jakarta.transaction.Transactional;
 
 /**
  * @author xezzon
@@ -24,5 +25,14 @@ public class DictDAO extends BaseJpaWrapper<Dict, QDict, DictRepository> {
   @Override
   protected Class<Dict> getBeanClass() {
     return Dict.class;
+  }
+
+  @Transactional()
+  public void updateTag(String oldValue, String newValue) {
+    this.getQueryFactory()
+        .update(this.getQuery())
+        .set(this.getQuery().tag, newValue)
+        .where(this.getQuery().tag.eq(oldValue))
+        .execute();
   }
 }

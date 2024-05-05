@@ -1,6 +1,8 @@
 package io.github.xezzon.geom.dict;
 
+import io.github.xezzon.geom.dict.domain.AddDictReq;
 import io.github.xezzon.geom.dict.domain.Dict;
+import io.github.xezzon.geom.dict.domain.ModifyDictReq;
 import io.github.xezzon.geom.domain.CommonQueryBean;
 import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.tao.logger.LogRecord;
@@ -45,7 +47,8 @@ public class DictController {
    */
   @Post()
   @LogRecord
-  public Id addDict(@Body @Valid Dict dict) {
+  public Id addDict(@Body @Valid AddDictReq req) {
+    Dict dict = req.into();
     dictService.addDict(dict);
     return Id.of(dict.getId());
   }
@@ -86,7 +89,8 @@ public class DictController {
    * @return 返回修改后的字典项ID
    */
   @Put()
-  public Id modifyDict(@Body @Valid Dict dict) {
+  public Id modifyDict(@Body @Valid ModifyDictReq req) {
+    Dict dict = req.into();
     dictService.modifyDict(dict);
     return Id.of(dict.getId());
   }

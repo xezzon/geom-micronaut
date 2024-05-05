@@ -1,7 +1,9 @@
 package io.github.xezzon.geom.menu;
 
 import io.github.xezzon.geom.domain.Id;
+import io.github.xezzon.geom.menu.domain.AddMenuReq;
 import io.github.xezzon.geom.menu.domain.Menu;
+import io.github.xezzon.geom.menu.domain.ModifyMenuReq;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
@@ -40,7 +42,8 @@ public class MenuController {
    * @return 返回添加后菜单的ID
    */
   @Post()
-  public Id addMenu(@Body Menu menu) {
+  public Id addMenu(@Body AddMenuReq req) {
+    Menu menu = req.into();
     menuService.addMenu(menu);
     return Id.of(menu.getId());
   }
@@ -51,7 +54,8 @@ public class MenuController {
    * @return 返回修改后的菜单ID
    */
   @Put()
-  public Id modifyMenu(@Body Menu menu) {
+  public Id modifyMenu(@Body ModifyMenuReq req) {
+    Menu menu = req.into();
     menuService.modifyMenu(menu);
     return Id.of(menu.getId());
   }

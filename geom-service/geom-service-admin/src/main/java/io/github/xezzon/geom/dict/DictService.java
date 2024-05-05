@@ -1,6 +1,7 @@
 package io.github.xezzon.geom.dict;
 
 import io.github.xezzon.geom.dict.domain.Dict;
+import io.github.xezzon.geom.exception.NonexistentDataException;
 import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.tao.retrieval.CommonQuery;
 import io.github.xezzon.tao.tree.Tree;
@@ -8,6 +9,7 @@ import io.micronaut.data.model.Page;
 import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,10 +41,7 @@ public class DictService {
    * @throws RepeatDataException 如果字典标签和字典码已存在，则抛出此异常
    */
   protected void addDict(Dict dict) {
-    Optional<Dict> exist = dictDAO.get().findByTagAndCode(dict.getTag(), dict.getCode());
-    if (exist.isEmpty()) {
-      throw new RepeatDataException("字典码已存在");
-    }
+    checkRepeat(dict);
     dictDAO.get().save(dict);
   }
 
@@ -75,7 +74,17 @@ public class DictService {
    * @param dict 要修改的字典项
    */
   protected void modifyDict(Dict dict) {
-    dictDAO.get().save(dict);
+    Optional<Dict> exist = dictDAO.get().findById(dict.getId());
+    if (exist.isEmpty()) {
+      throw new NonexistentDataException("字典已被删除: " + dict.getCode());
+    }
+    dict.setTag(exist.get().getTag());
+    checkRepeat(dict);
+    /* 持久化 */
+    dictDAO.update(dict);
+    if (Objects.equals(exist.get().getParentId(), Dict.ROOT_ID)) {
+      dictDAO.updateTag(exist.get().getCode(), dict.getCode());
+    }
   }
 
   /**
@@ -86,5 +95,12 @@ public class DictService {
    */
   protected Dict dictByTagAndCode(String tag, String code) {
     return dictDAO.get().findByTagAndCode(tag, code).orElse(null);
+  }
+
+  private void checkRepeat(Dict dict) {
+    Dict exist = this.dictByTagAndCode(dict.getTag(), dict.getCode());
+    if (exist != null && !Objects.equals(dict.getId(), exist.getId())) {
+      throw new RepeatDataException("字典码已存在");
+    }
   }
 }

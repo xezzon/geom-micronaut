@@ -15,6 +15,9 @@ public class GeomConfig {
   public static final String GEOM = "geom";
   public static final String ID_GENERATOR = "id-generator";
 
+  /**
+   * ID 生成策略
+   */
   protected String idGenerator;
 
   @Getter
@@ -22,6 +25,9 @@ public class GeomConfig {
   @ConfigurationProperties("jwt")
   public static class GeomJwtConfig {
 
+    /**
+     * JWT 签发机构
+     */
     protected String issuer;
   }
 }

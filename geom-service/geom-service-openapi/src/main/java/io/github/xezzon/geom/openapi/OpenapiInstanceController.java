@@ -10,12 +10,15 @@ import io.micronaut.http.annotation.Get;
 @Controller("/openapi-instance")
 public class OpenapiInstanceController {
 
-  private final transient OpenapiService openapiService;
+  private final OpenapiService openapiService;
 
   public OpenapiInstanceController(OpenapiService openapiService) {
     this.openapiService = openapiService;
   }
 
+  /**
+   * TODO
+   */
   @Get()
   public Page<OpenapiInstance> getOpenapiInstancePage() {
     return Page.empty();

@@ -1,16 +1,18 @@
 package io.github.xezzon.geom.menu;
 
 import cn.hutool.core.util.RandomUtil;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.menu.domain.Menu;
 import io.github.xezzon.geom.menu.repository.MenuRepository;
-import io.github.xezzon.tao.exception.ClientException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -151,7 +153,7 @@ class MenuServiceTest {
     menu1.setHideInMenu(RandomUtil.randomBoolean());
     menu1.setParentId(menu.getParentId());
 
-    Assertions.assertThrows(ClientException.class, () -> service.addMenu(menu1));
+    Assertions.assertThrows(RepeatDataException.class, () -> service.addMenu(menu1));
   }
 
   @Test
@@ -171,5 +173,30 @@ class MenuServiceTest {
     );
 
     Assertions.assertEquals(menus.size() - removed.size(), repository.findAll().size());
+  }
+
+  @Test
+  void modifyMenu() {
+    List<Menu> menus = repository.findAll();
+    final String parentId = menus.parallelStream()
+        .collect(Collectors.groupingBy(Menu::getParentId, Collectors.counting()))
+        .entrySet().parallelStream()
+        .filter((entry) -> entry.getValue() > 1)
+        .map(Entry::getKey)
+        .findAny().get();
+    final List<Menu> dataset = menus.parallelStream()
+        .filter((o) -> Objects.equals(o.getParentId(), parentId))
+        .toList();
+    Menu toModify = dataset.get(0);
+    /* 数据重复 */
+    toModify.setPath(dataset.get(1).getPath());
+    Assertions.assertThrows(RepeatDataException.class, () -> service.modifyMenu(toModify));
+    /* 正常修改 */
+    toModify.setPath(RandomUtil.randomString(6));
+    toModify.setName(RandomUtil.randomString(6));
+    service.modifyMenu(toModify);
+    Menu actual = repository.findById(toModify.getId()).get();
+    Assertions.assertEquals(toModify.getPath(), actual.getPath());
+    Assertions.assertEquals(toModify.getName(), actual.getName());
   }
 }

@@ -13,8 +13,17 @@ import org.mapstruct.factory.Mappers;
 @Data
 public class GroupMemberUser {
 
+  /**
+   * 用户组主键
+   */
   private String groupId;
+  /**
+   * 用户主键
+   */
   private String userId;
+  /**
+   *
+   */
   private String username;
   private String nickname;
 

@@ -1,7 +1,6 @@
 package io.github.xezzon.geom.group.domain;
 
 import cn.hutool.core.codec.Hashids;
-import cn.hutool.core.util.HexUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.xezzon.geom.constant.DatabaseConstant;
 import io.github.xezzon.geom.constant.StaticConstants;
@@ -13,10 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serial;
+import java.nio.charset.Charset;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.bouncycastle.util.encoders.Hex;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -74,13 +76,33 @@ public class Group extends BaseEntity<String> {
 
   public String getAccessKey() {
     return Hashids.create(StaticConstants.getHashidsSalt().toCharArray())
-        .encodeFromHex(HexUtil.encodeHexStr(this.id));
+        .encodeFromHex(Hex.toHexString(this.id.getBytes()));
   }
 
   public void setAccessKey(String accessKey) {
-    this.id = HexUtil.decodeHexStr(
+    this.id = new String(Hex.decode(
         Hashids.create(StaticConstants.getHashidsSalt().toCharArray())
             .decodeToHex(accessKey)
-    );
+    ), Charset.defaultCharset());
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    Group group = (Group) o;
+    return Objects.equals(id, group.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), id);
   }
 }

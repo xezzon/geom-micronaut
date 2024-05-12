@@ -7,6 +7,7 @@ import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Singleton;
 
 /**
+ * 雪花ID
  * @author xezzon
  */
 @Singleton

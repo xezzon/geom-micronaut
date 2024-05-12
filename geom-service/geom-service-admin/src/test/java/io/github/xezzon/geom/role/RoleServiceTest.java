@@ -1,11 +1,12 @@
 package io.github.xezzon.geom.role;
 
 import cn.hutool.core.util.RandomUtil;
+import io.github.xezzon.geom.core.exception.RoleCannotInheritException;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.role.domain.AddRoleQuery;
 import io.github.xezzon.geom.role.domain.ModifyRoleQuery;
 import io.github.xezzon.geom.role.domain.Role;
 import io.github.xezzon.geom.role.repository.RoleRepository;
-import io.github.xezzon.tao.exception.ClientException;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ class RoleServiceTest {
     query.setName(RandomUtil.randomString(9));
     query.setInheritable(RandomUtil.randomBoolean());
     query.setParentId(parent.getId());
-    Assertions.assertThrows(ClientException.class, () ->
+    Assertions.assertThrows(RoleCannotInheritException.class, () ->
         service.addRole(query.into())
     );
   }
@@ -94,13 +95,16 @@ class RoleServiceTest {
     Role exist = dataset.parallelStream()
         .filter((o) -> !o.getInheritable())
         .findAny().get();
+    Role parent = dataset.parallelStream()
+        .filter(Role::getInheritable)
+        .findAny().get();
 
     AddRoleQuery query = new AddRoleQuery();
     query.setCode(exist.getCode());
     query.setName(RandomUtil.randomString(9));
     query.setInheritable(RandomUtil.randomBoolean());
-    query.setParentId("");
-    Assertions.assertThrows(ClientException.class, () ->
+    query.setParentId(parent.getId());
+    Assertions.assertThrows(RepeatDataException.class, () ->
         service.addRole(query.into())
     );
   }

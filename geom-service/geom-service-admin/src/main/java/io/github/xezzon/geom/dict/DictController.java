@@ -1,6 +1,8 @@
 package io.github.xezzon.geom.dict;
 
+import io.github.xezzon.geom.dict.domain.AddDictReq;
 import io.github.xezzon.geom.dict.domain.Dict;
+import io.github.xezzon.geom.dict.domain.ModifyDictReq;
 import io.github.xezzon.geom.domain.CommonQueryBean;
 import io.github.xezzon.geom.domain.Id;
 import io.github.xezzon.tao.logger.LogRecord;
@@ -24,7 +26,7 @@ import java.util.List;
 @Controller("/dict")
 public class DictController {
 
-  private final transient DictService dictService;
+  private final DictService dictService;
 
   public DictController(DictService dictService) {
     this.dictService = dictService;
@@ -45,7 +47,8 @@ public class DictController {
    */
   @Post()
   @LogRecord
-  public Id addDict(@Body @Valid Dict dict) {
+  public Id addDict(@Body @Valid AddDictReq req) {
+    Dict dict = req.into();
     dictService.addDict(dict);
     return Id.of(dict.getId());
   }
@@ -71,13 +74,23 @@ public class DictController {
     return dictService.dictByTagAndCode(tag, code);
   }
 
+  /**
+   * 从字典服务中删除指定id的字典项
+   * @param id 要删除的字典项的id
+   */
   @Delete("/{id}")
   public void remove(@PathVariable String id) {
     dictService.removeDict(id);
   }
 
+  /**
+   * 修改字典项
+   * @param dict 要修改的字典项对象
+   * @return 返回修改后的字典项ID
+   */
   @Put()
-  public Id modifyDict(@Body @Valid Dict dict) {
+  public Id modifyDict(@Body @Valid ModifyDictReq req) {
+    Dict dict = req.into();
     dictService.modifyDict(dict);
     return Id.of(dict.getId());
   }

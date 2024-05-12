@@ -1,7 +1,7 @@
 package io.github.xezzon.geom.dict.domain;
 
-import static io.github.xezzon.geom.dict.domain.Dict.CODE;
-import static io.github.xezzon.geom.dict.domain.Dict.TAG;
+import static io.github.xezzon.geom.dict.domain.Dict.CODE_COLUMN;
+import static io.github.xezzon.geom.dict.domain.Dict.TAG_COLUMN;
 
 import io.github.xezzon.geom.constant.DatabaseConstant;
 import io.github.xezzon.geom.manager.HibernateIdGenerator;
@@ -14,8 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,14 +31,16 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(
     name = "geom_dict",
     uniqueConstraints = {
-        @UniqueConstraint(columnNames = {TAG, CODE})
+        @UniqueConstraint(columnNames = {TAG_COLUMN, CODE_COLUMN})
     }
 )
 @Entity
 public class Dict implements IDict, TreeNode<Dict, String> {
 
-  static final String TAG = "tag";
-  static final String CODE = "code";
+  public static final String ROOT_ID = "0";
+  public static final String ROOT_CODE = "dict";
+  static final String TAG_COLUMN = "tag";
+  static final String CODE_COLUMN = "code";
 
   @Id
   @Column(name = "id", nullable = false, updatable = false, length = DatabaseConstant.ID_LENGTH)
@@ -53,15 +53,12 @@ public class Dict implements IDict, TreeNode<Dict, String> {
   /**
    * 字典目
    */
-  @Column(name = TAG, nullable = false, updatable = false)
-  @NotNull(message = "字典目不能为空")
+  @Column(name = TAG_COLUMN, nullable = false, updatable = false)
   String tag;
   /**
    * 字典值
    */
-  @NotNull(message = "字典编码不能为空")
-  @Pattern(regexp = "[\\w-]+", message = "字典编码只允许英文字母、下划线、短横线")
-  @Column(name = CODE, nullable = false, updatable = false)
+  @Column(name = CODE_COLUMN, nullable = false, updatable = false)
   String code;
   /**
    * 字典描述

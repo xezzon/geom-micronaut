@@ -1,4 +1,4 @@
-package io.github.xezzon.geom.user;
+package io.github.xezzon.geom.domain;
 
 import lombok.Getter;
 import lombok.Setter;

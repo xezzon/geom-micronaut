@@ -2,14 +2,14 @@ package io.github.xezzon.geom.group;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
+import io.github.xezzon.geom.exception.RepeatDataException;
 import io.github.xezzon.geom.group.domain.Group;
 import io.github.xezzon.geom.group.domain.GroupMember;
 import io.github.xezzon.geom.group.domain.GroupMemberUser;
-import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.group.repository.GroupMemberRepository;
 import io.github.xezzon.geom.group.repository.GroupRepository;
+import io.github.xezzon.geom.user.domain.User;
 import io.github.xezzon.geom.user.repository.UserRepository;
-import io.github.xezzon.tao.exception.ClientException;
 import io.micronaut.data.model.Page;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -110,7 +110,7 @@ class GroupServiceTest {
   void addGroup_repeat() {
     final Group group = RandomUtil.randomEle(GROUPS);
 
-    Assertions.assertThrows(ClientException.class, () -> {
+    Assertions.assertThrows(RepeatDataException.class, () -> {
       Group group1 = new Group();
       group1.setCode(group.getCode());
       group1.setName(RandomUtil.randomString(8));
@@ -150,6 +150,9 @@ class GroupServiceTest {
     decrypt.init(Cipher.DECRYPT_MODE, secretKeySpec);
     String decrypted = new String(decrypt.doFinal(encrypted));
     Assertions.assertEquals(message, decrypted);
+    /* 获取密钥 */
+    String secretKey = service.getSecretKey(group.getId());
+    Assertions.assertEquals(secretKeyString, secretKey);
   }
 
   @Test

@@ -1,15 +1,14 @@
 package io.github.xezzon.geom.group;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.HexUtil;
 import cn.hutool.crypto.PemUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import io.github.xezzon.geom.core.exception.InvalidPublicKeyException;
 import io.github.xezzon.geom.domain.Id;
+import io.github.xezzon.geom.group.domain.AddGroupQuery;
 import io.github.xezzon.geom.group.domain.Group;
 import io.github.xezzon.geom.group.domain.GroupMemberUser;
-import io.github.xezzon.geom.group.domain.AddGroupQuery;
-import io.github.xezzon.tao.exception.ServerException;
 import io.micronaut.data.model.Page;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -22,6 +21,7 @@ import io.micronaut.http.annotation.QueryValue;
 import java.io.StringReader;
 import java.util.Collections;
 import java.util.List;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * @author xezzon
@@ -29,7 +29,7 @@ import java.util.List;
 @Controller("/user-group")
 public class GroupController {
 
-  private final transient GroupService groupService;
+  private final GroupService groupService;
 
   public GroupController(GroupService groupService) {
     this.groupService = groupService;
@@ -75,13 +75,13 @@ public class GroupController {
   @Patch("/{id}/secret-key")
   public String refreshSecretKey(@PathVariable String id, String publicKey) {
     if (publicKey == null) {
-      throw new ServerException("缺少参数，无法生成密钥");
+      throw new InvalidPublicKeyException();
     }
     String secretKey = groupService.generateSecretKey(id);
     RSA rsa = new RSA(
         null, PemUtil.readPemObject(new StringReader(publicKey)).getContent()
     );
-    return HexUtil.encodeHexStr(rsa.encrypt(secretKey, KeyType.PublicKey));
+    return Hex.toHexString(rsa.encrypt(secretKey, KeyType.PublicKey));
   }
 
   /**

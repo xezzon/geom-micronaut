@@ -11,7 +11,13 @@ import org.mapstruct.factory.Mappers;
 @Data
 public class AddGroupQuery {
 
+  /**
+   * 用户组编码
+   */
   private String code;
+  /**
+   * 用户组名
+   */
   private String name;
 
   public Group to() {

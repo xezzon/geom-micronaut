@@ -61,10 +61,18 @@ geom-service-admin
 
 `TODO`
 
-## 代码风格
+## 代码规范
 
 `TODO`
 
-## 如何提交您的代码
+## 配置规范
+
+`TODO`
+
+## 工程规范
+
+`TODO`
+
+## 提交规范
 
 `TODO`

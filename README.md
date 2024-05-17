@@ -21,6 +21,11 @@ geom 后端提供 2 个服务与 1 个 SDK。
 
 ## 如何使用
 
+```mermaid
+C4Container
+title Container diagram for geom service
+```
+
 最简单的方式是通过 [docker-compose](./docker-compose.yml) 启动。
 
 ```shell

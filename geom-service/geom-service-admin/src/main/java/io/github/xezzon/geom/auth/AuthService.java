@@ -86,7 +86,7 @@ public class AuthService {
    */
   protected String signJwt() {
     UserDTO currentUser = this.getCurrentUser();
-    return jwtCryptoService.sign(currentUser);
+    return jwtCryptoService.sign(currentUser.into());
   }
 
   /**

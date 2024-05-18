@@ -121,11 +121,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-    <dependency>
       <groupId>io.micronaut.liquibase</groupId>
       <artifactId>micronaut-liquibase</artifactId>
     </dependency>

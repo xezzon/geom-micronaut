@@ -1,25 +1,26 @@
 package io.github.xezzon.geom.crypto;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.Digester;
 import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.github.xezzon.geom.config.GeomConfig.GeomJwtConfig;
 import io.github.xezzon.geom.crypto.service.DigestCryptoService;
 import io.github.xezzon.geom.crypto.service.JwtCryptoService;
 import io.github.xezzon.geom.crypto.service.SymmetricCryptoService;
+import io.github.xezzon.geom.domain.JwtDTO;
 import io.micronaut.context.annotation.Bean;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 import javax.crypto.KeyGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 加密、散列相关
@@ -41,11 +42,11 @@ public class CryptoService implements JwtCryptoService, SymmetricCryptoService,
   }
 
   @Override
-  public String sign(Object subject) {
-    return JWT.create()
+  public String sign(@NotNull JwtDTO dto) {
+    return dto.into()
         .withIssuer(geomJwtConfig.getIssuer())
-        .withIssuedAt(new Date())
-        .withClaim("sub", BeanUtil.beanToMap(subject))
+        .withIssuedAt(Instant.now())
+        .withJWTId(UUID.randomUUID().toString())
         .sign(Algorithm.ECDSA256(keyManager.getPrivateKey()));
   }
 

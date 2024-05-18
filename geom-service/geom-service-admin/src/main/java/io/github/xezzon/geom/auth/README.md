@@ -25,5 +25,38 @@ sequenceDiagram
     service -->> client: 返回请求结果 
 ```
 
-# 授权
+## 第三方认证
+
+```mermaid
+---
+title: 认证流程
+---
+flowchart TB
+    subgraph 第三方系统
+        apply-secret-key["申请Key、密钥"]
+        store-secret-key["存储Key、密钥"]
+        subgraph 发送HTTP请求
+            generate-timestamp["生成时间戳"]
+            generate-checksum["生成摘要"]
+            encrypt-message["用密钥加密消息"]
+            send-message["携带Key、时间戳、摘要发送HTTP请求"]
+            
+            generate-timestamp --- generate-checksum --- encrypt-message --> send-message
+        end
+        store-secret-key -.-> generate-timestamp
+    end
+    subgraph 认证中心
+        send-secret-key["发放Key、密钥"]
+        subgraph 消息解密
+            check-timestamp["校验时间戳"]
+            decrypt-key["解密Key 获得ID 并查询到对应的组织"]
+            decrypt-message["用查询到的该组织的密钥解密消息"]
+            check-checksum["校验摘要"]
+            
+            send-message --> check-timestamp --> decrypt-key --> decrypt-message --> check-checksum
+        end
+    end
+    
+    apply-secret-key --> send-secret-key --> store-secret-key
+```
 

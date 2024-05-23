@@ -107,7 +107,27 @@ geom-service-admin
 
 ## 工程规范
 
-`TODO`
+以下内容基于 Github 平台。
+
+Project：需求、Bug 管理的各种视图。每一个功能对应一个 Project。可关联多个仓库。
+
+Milestone：构件的版本号。按语义化版本，取`主版本号.次版本号`，修订版本号不参与命名。
+
+Issue：需求或线上Bug。
+
+Discussion：使用过程中的疑问或对新功能的可行性讨论。
+
+| 活动    | 角色     | 视图               | 操作                                                                                                    |
+|-------|--------|------------------|-------------------------------------------------------------------------------------------------------|
+| 提需求   | 所有人    | New issue        | 选择模板`Feature request`/`Bug report`；<br>选择标签`enhancement`/`bug`；                                       |
+| 需求评审  | 需求管理员  | Issues           | 完成需求规格说明书；<br>选择优先级，关联Milestone，关联Project（状态为`Todo`）；<br>关闭issue，选择标签`duplicate`/`invalid`/`wontfix`； |
+| 任务分配  | 软件开发人员 | Project/Overview | 分配人员，将状态改为`In Progress`；                                                                              |
+| 需求开发  | 软件开发人员 | Project/My Items | 发起Pull request，选择标签`enhancement`/`document`/`bug`；<br/>关联需求issue。                                     |
+| 非需求开发 | 软件开发人员 | New pull request | 选择标签`enhancement`/`document`/`bug`，关联Milestone，关联Project（状态为`Todo`）；                                  |
+| 代码评审  | 所有人    | Pull requests    | 评审、评论，状态自动变更为`In Progress`；<br/>合并后，状态自动变更为`Done`；                                                    |
+
+需求开发的场景包括新功能、原有功能的新需求、原有需求变更、修复已上线版本的 Bug。
+非需求开发的场景包括修改已发布功能的配置、重构、补充文档、修复已发布功能的拼写错误等。
 
 ## 提交规范
 
